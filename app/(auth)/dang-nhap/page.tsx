@@ -49,7 +49,7 @@ const Page = () => {
   const { login } = useUserStore()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
-
+  console.log({ loading })
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true)
     login(data)

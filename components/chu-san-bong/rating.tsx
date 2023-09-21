@@ -3,26 +3,25 @@ import React from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import RatingStar from "../rating-star"
 import { ArrowUp } from "lucide-react"
+import StatisticItem from "./statistic-item"
 
 const Rating = () => {
   return (
-    <Card className="col-span-2">
-      <CardHeader>
-        <CardTitle>Đánh giá tổng quan</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <RatingStar total={5} rating={2} size={40} />
-        <p className="mt-2">
-          <span className="text-xl font-semibold">100</span> đánh giá
-        </p>
-      </CardContent>
-      <CardFooter>
+    <StatisticItem
+      wrapperClassName="col-span-2"
+      title="Đánh giá tổng quan"
+      footer={
         <div className="flex items-center gap-2">
           <ArrowUp className="text-green-500" />
           <span className="text-sm font-semibold text-green-500">+1.2%</span>
         </div>
-      </CardFooter>
-    </Card>
+      }
+    >
+      <RatingStar total={5} rating={2} size={40} />
+      <p className="mt-2">
+        <span className="text-xl font-semibold">100</span> đánh giá
+      </p>
+    </StatisticItem>
   )
 }
 

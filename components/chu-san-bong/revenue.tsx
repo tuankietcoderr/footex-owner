@@ -13,6 +13,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { ComboBox, IComboBox } from "../ui/combo-box"
 import { getDaysInMonth, monthByNumber, nearlyYears } from "@/lib/date"
 import { useState } from "react"
+import BlurElement from "../blur-element"
 
 const Revenue = () => {
   const data = [
@@ -122,62 +123,64 @@ const Revenue = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Doanh thu</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-4 flex justify-end gap-2">
-          <ComboBox
-            initialText="Theo"
-            data={filterData}
-            onChange={onChangeFilter}
-            className="w-fit"
-            value={filter}
-          />
-          {(filter === "year" || filter === "all") && (
+    <BlurElement>
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle>Doanh thu</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="mb-4 flex justify-end gap-2">
             <ComboBox
-              initialText="Chọn năm"
-              data={yearsLabel}
-              onChange={onChangeYear}
+              initialText="Theo"
+              data={filterData}
+              onChange={onChangeFilter}
               className="w-fit"
-              value={new Date().getFullYear().toString()}
-              extraText="Năm"
+              value={filter}
             />
-          )}
-          {(filter === "month" || filter === "all") && (
-            <ComboBox
-              initialText="Chọn tháng"
-              data={monthsLabel}
-              onChange={onChangeMonth}
-              className="w-fit"
-              value={month}
-              extraText="Tháng"
-            />
-          )}
-          {(filter === "day" || filter === "all") && (
-            <ComboBox
-              initialText="Chọn ngày"
-              data={daysLabel}
-              onChange={onChangeDay}
-              className="w-fit"
-              value={day}
-              extraText="Ngày"
-            />
-          )}
-        </div>
-        <ResponsiveContainer width={"100%"} height={300}>
-          <BarChart width={200} height={300} data={data}>
-            <CartesianGrid strokeDasharray="1 0" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="revenue_2021" stackId="a" fill="#8884d8" radius={100} barSize={10} />
-          </BarChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
+            {(filter === "year" || filter === "all") && (
+              <ComboBox
+                initialText="Chọn năm"
+                data={yearsLabel}
+                onChange={onChangeYear}
+                className="w-fit"
+                value={new Date().getFullYear().toString()}
+                extraText="Năm"
+              />
+            )}
+            {(filter === "month" || filter === "all") && (
+              <ComboBox
+                initialText="Chọn tháng"
+                data={monthsLabel}
+                onChange={onChangeMonth}
+                className="w-fit"
+                value={month}
+                extraText="Tháng"
+              />
+            )}
+            {(filter === "day" || filter === "all") && (
+              <ComboBox
+                initialText="Chọn ngày"
+                data={daysLabel}
+                onChange={onChangeDay}
+                className="w-fit"
+                value={day}
+                extraText="Ngày"
+              />
+            )}
+          </div>
+          <ResponsiveContainer width={"100%"} height={300}>
+            <BarChart width={200} height={300} data={data}>
+              <CartesianGrid strokeDasharray="1 0" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="revenue_2021" stackId="a" fill="#8884d8" radius={100} barSize={10} />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </BlurElement>
   )
 }
 
