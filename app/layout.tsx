@@ -1,15 +1,16 @@
 import OwnerSideBar from "@/components/chu-san-bong/sidebar"
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Lexend } from "next/font/google"
 import React from "react"
 import OwnerNav from "@/components/nav/OwnerNav"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthModalProvider } from "@/context/AuthModalContext"
 import AuthProvider from "./provider"
 import { Toaster } from "@/components/ui/toaster"
+import UnAuthProvider from "@/context/UnAuthProvider"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Lexend({ subsets: ["latin", "vietnamese"] })
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,11 +29,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <AuthProvider>
             <AuthModalProvider>
-              <div className="grid grid-cols-[260px_auto]">
+              <div className="grid md:grid-cols-[260px_auto] ">
                 <OwnerSideBar />
                 <div className="max-h-screen min-h-screen overflow-auto p-4">
                   <OwnerNav />
-                  <div className="py-4">{children}</div>
+                  <div className="py-4">
+                    <UnAuthProvider>{children}</UnAuthProvider>
+                  </div>
                   <Toaster />
                 </div>
               </div>

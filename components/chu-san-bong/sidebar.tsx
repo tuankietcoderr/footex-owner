@@ -1,13 +1,10 @@
 "use client"
-import React, { useEffect } from "react"
-import OwnerSidebarItem from "./sidebar-item"
-import { Dice6, Home, LucideIcon, RectangleVertical, Trophy, Users2 } from "lucide-react"
-import { useAuthModalContext } from "@/context/AuthModalContext"
-import useUserStore from "@/store/useUserStore"
-import { EUserRole } from "@/interface/IUser"
-import Link from "next/link"
+import { Dice6, Home, LucideIcon, Trophy, Users2 } from "lucide-react"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import Link from "next/link"
+import OwnerSidebarItem from "./sidebar-item"
+import useUserStore from "@/store/useUserStore"
+import { Skeleton } from "../ui/skeleton"
 
 interface OwnerSideBarNavItem {
   icon: LucideIcon
@@ -17,19 +14,6 @@ interface OwnerSideBarNavItem {
 
 const OwnerSideBar = () => {
   const { user } = useUserStore()
-  const { openModal, visible, closeModal } = useAuthModalContext()
-  const pathname = usePathname()
-
-  useEffect(() => {
-    if (visible && (pathname.includes("dang-nhap") || pathname.includes("dang-ky"))) {
-      closeModal()
-    }
-    if (!user || (user && user.role !== EUserRole.OWNER)) {
-      if (visible || pathname.includes("dang-nhap") || pathname.includes("dang-ky")) return
-      openModal()
-    }
-  }, [user, visible, pathname, openModal, closeModal])
-
   const sidebarNav: OwnerSideBarNavItem[] = [
     {
       icon: Home,
@@ -54,7 +38,7 @@ const OwnerSideBar = () => {
   ]
 
   return (
-    <aside className="flex max-h-screen min-h-screen flex-col items-center border-r border-border bg-card p-4 shadow-lg">
+    <aside className="hidden max-h-screen min-h-screen flex-col items-center border-r border-border bg-card p-4 shadow-md md:flex">
       <Link href={"/"}>
         <Image
           src={"/next.svg"}
@@ -64,15 +48,19 @@ const OwnerSideBar = () => {
           className="border border-border"
         />
       </Link>
-      <div className="mt-8 gap-2">
-        {sidebarNav.map((navItem, index) => (
-          <OwnerSidebarItem
-            key={navItem.link}
-            icon={navItem.icon}
-            label={navItem.label}
-            link={navItem.link}
-          />
-        ))}
+      <div className="mt-8 w-full">
+        {user !== undefined
+          ? sidebarNav.map((navItem, index) => (
+              <OwnerSidebarItem
+                key={navItem.link}
+                icon={navItem.icon}
+                label={navItem.label}
+                link={navItem.link}
+              />
+            ))
+          : Array.from({ length: 4 }, (_, index) => index + 1).map((_, index) => (
+              <Skeleton key={index} className="mb-2 h-8 w-full" />
+            ))}
       </div>
     </aside>
   )

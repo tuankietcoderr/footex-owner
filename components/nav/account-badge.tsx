@@ -11,11 +11,21 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import Link from "next/link"
+import { Skeleton } from "../ui/skeleton"
+import { Button } from "../ui/button"
 
 const AccountBadge = () => {
   const { user, logout } = useUserStore()
 
-  return (
+  return user === undefined ? (
+    <Skeleton className="h-8 w-8 rounded-full md:h-10 md:w-10" />
+  ) : user === null ? (
+    <Button asChild>
+      <Link href={"/dang-nhap"} className="w-max">
+        Đăng nhập
+      </Link>
+    </Button>
+  ) : (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="h-8 w-8 md:h-10 md:w-10">

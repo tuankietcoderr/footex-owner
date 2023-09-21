@@ -1,24 +1,23 @@
-"use client"
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts"
+import CustomerBook from "./customer-book"
+import CustomerCancel from "./customer-cancel"
+import HelloCard from "./hello-card"
+import Profit from "./profit"
+import Rating from "./rating"
+import Revenue from "./revenue"
+import Transactions from "./transactions"
 
 const Dashboard = () => {
-  const data = [
-    { name: "Page A", uv: 400, pv: 2400, amt: 2400 },
-    { name: "Page B", uv: 300, pv: 2100, amt: 2200 },
-    { name: "Page C", uv: 240, pv: 2100, amt: 2200 },
-    { name: "Page D", uv: 80, pv: 2100, amt: 2200 },
-  ]
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Tổng doanh thu</CardTitle>
-          <CardDescription>Tổng doanh thu của bạn</CardDescription>
-        </CardHeader>
-        <CardContent>0</CardContent>
-      </Card>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-[60%_auto_auto]">
+      <HelloCard />
+      <Profit />
+      <Transactions />
+      <Revenue />
+      <div className="col-span-2 grid grid-cols-2 gap-4">
+        <CustomerBook />
+        <CustomerCancel />
+        <Rating />
+      </div>
     </div>
   )
 }

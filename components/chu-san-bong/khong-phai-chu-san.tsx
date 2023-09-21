@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -6,19 +6,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import Link from "next/link";
+} from "@/components/ui/dialog"
+import Link from "next/link"
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+  isOpen: boolean
+  onClose: () => void
+}
 
 export default function NotOwner({ isOpen, onClose }: Props) {
   const onOpenChange = (open: boolean) => {
     if (!open) {
-      onClose();
+      onClose()
     }
-  };
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -31,10 +31,10 @@ export default function NotOwner({ isOpen, onClose }: Props) {
         </DialogHeader>
         <DialogFooter>
           <Button type="submit" asChild size={"sm"} onClick={onClose}>
-            <Link href="/chu-san-bong/dang-ky">Đăng ký</Link>
+            <Link href="/dang-ky">Đăng ký</Link>
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
