@@ -21,7 +21,7 @@ const AccountBadge = () => {
 
   const onLogout = () => {
     logout()
-    reset()
+    reset("all")
   }
 
   return user === undefined ? (

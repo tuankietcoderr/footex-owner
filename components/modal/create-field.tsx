@@ -72,7 +72,8 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
     setLoading(true)
     const sendData: IField = {
       ...data,
-      organization: bigField?._id,
+      organization: bigField?._id!,
+      is_being_used: false,
     }
     await addField(sendData)
       .then((res) => {
