@@ -13,7 +13,6 @@ import { Check, Moon, Sun } from "lucide-react"
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme()
-  console.log({ theme })
   const themes = [
     {
       name: "Light",

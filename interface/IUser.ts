@@ -10,8 +10,8 @@ export default interface IUser {
   password?: string
   role: EUserRole
   name: string
-  email?: string
+  email: string
   avatar?: string
   phone_number?: string
-  teams?: string[]
+  teams: string[]
 }

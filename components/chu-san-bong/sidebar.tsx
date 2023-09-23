@@ -1,12 +1,12 @@
 "use client"
-import { Dice6, Home, LucideIcon, Trophy, Users2 } from "lucide-react"
+import { Building, Dice6, Home, LucideIcon, Trophy, Users2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import OwnerSidebarItem from "./sidebar-item"
 import useUserStore from "@/store/useUserStore"
 import { Skeleton } from "../ui/skeleton"
 
-interface OwnerSideBarNavItem {
+export interface IOwnerSideBarNavItem {
   icon: LucideIcon
   label: string
   link: string
@@ -14,7 +14,7 @@ interface OwnerSideBarNavItem {
 
 const OwnerSideBar = () => {
   const { user } = useUserStore()
-  const sidebarNav: OwnerSideBarNavItem[] = [
+  const sidebarNav: IOwnerSideBarNavItem[] = [
     {
       icon: Home,
       label: "Bảng điều khiển",
@@ -35,10 +35,15 @@ const OwnerSideBar = () => {
       label: "Quản lý khách hàng",
       link: "/quan-ly-khach-hang",
     },
+    {
+      icon: Building,
+      label: "Quản lý tổ chức",
+      link: "/quan-ly-to-chuc",
+    },
   ]
 
   return (
-    <aside className="hidden max-h-screen min-h-screen flex-col items-center border-r border-border bg-card p-4 shadow-md md:flex">
+    <aside className="hidden max-h-screen min-h-screen flex-col items-center border-r border-border bg-card p-4 shadow-sm md:flex">
       <Link href={"/"}>
         <Image
           src={"/next.svg"}
@@ -58,7 +63,7 @@ const OwnerSideBar = () => {
                 link={navItem.link}
               />
             ))
-          : Array.from({ length: 4 }, (_, index) => index + 1).map((_, index) => (
+          : Array.from({ length: sidebarNav.length }, (_, index) => index + 1).map((_, index) => (
               <Skeleton key={index} className="mb-2 h-8 w-full" />
             ))}
       </div>

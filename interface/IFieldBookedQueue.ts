@@ -1,3 +1,6 @@
+import IField from "./IField"
+import IUser from "./IUser"
+
 export enum EBOOKED_QUEUE_STATUS {
   PENDING = "PENDING",
   CANCELLED = "CANCELLED",
@@ -5,9 +8,9 @@ export enum EBOOKED_QUEUE_STATUS {
 }
 export default interface IFieldBookedQueue {
   _id?: string
-  field_id?: string
+  field: string | IField
   booked_time?: Date
-  booked_by?: string
-  time_count?: number
-  status?: EBOOKED_QUEUE_STATUS
+  booked_by: string | IUser
+  time_count: number
+  status: EBOOKED_QUEUE_STATUS
 }

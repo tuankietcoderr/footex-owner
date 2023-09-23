@@ -13,9 +13,16 @@ import {
 import Link from "next/link"
 import { Skeleton } from "../ui/skeleton"
 import { Button } from "../ui/button"
+import useBigFieldStore from "@/store/useBigFieldStore"
 
 const AccountBadge = () => {
   const { user, logout } = useUserStore()
+  const { reset } = useBigFieldStore()
+
+  const onLogout = () => {
+    logout()
+    reset()
+  }
 
   return user === undefined ? (
     <Skeleton className="h-8 w-8 rounded-full md:h-10 md:w-10" />
@@ -46,7 +53,7 @@ const AccountBadge = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={logout}
+          onClick={onLogout}
           className="text-destructive dark:text-destructive-foreground"
         >
           Đăng xuất

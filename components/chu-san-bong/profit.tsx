@@ -1,7 +1,6 @@
+import { toDot } from "@/lib/converter"
 import { ArrowDown, PieChart } from "lucide-react"
 import StatisticItem from "./statistic-item"
-import { toDot } from "@/lib/converter"
-import ProfitMoney from "@/illustrations/profit-money"
 
 const Profit = () => {
   return (

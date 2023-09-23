@@ -6,11 +6,13 @@ import { Skeleton } from "./ui/skeleton"
 
 type BlurElementProps = {
   wrapperClassname?: string
+  visible?: boolean
 } & React.PropsWithChildren
 
-const BlurElement = ({ children, wrapperClassname }: BlurElementProps) => {
+const BlurElement = ({ children, wrapperClassname, visible }: BlurElementProps) => {
   const { user } = useUserStore()
-  return user !== undefined ? (
+  const visibleBlur = visible !== undefined ? visible && user === undefined : user === undefined
+  return !visibleBlur ? (
     children
   ) : (
     <div className={cn("relative", wrapperClassname)}>

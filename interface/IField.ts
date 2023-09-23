@@ -1,10 +1,13 @@
-import IFootballShop from "./IFootballShop"
+import IOrganization from "./IOrganization"
 
 export default interface IField {
   _id?: string
-  footballshop_id?: string | IFootballShop
+  organization: string | IOrganization
   name: string
-  price?: number
+  price: number
   description?: string
-  is_being_used?: boolean
+  is_being_used: boolean
+  images?: string[]
+  thumbnail?: string
+  rating?: number
 }

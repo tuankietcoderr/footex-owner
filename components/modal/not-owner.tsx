@@ -30,8 +30,11 @@ export default function NotOwner({ isOpen, onClose }: Props) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="submit" asChild size={"sm"} onClick={onClose}>
+          <Button asChild variant={"outline"} size={"sm"} onClick={onClose}>
             <Link href="/dang-ky">Đăng ký</Link>
+          </Button>
+          <Button asChild size={"sm"} onClick={onClose}>
+            <Link href="/dang-nhap">Đăng nhập</Link>
           </Button>
         </DialogFooter>
       </DialogContent>

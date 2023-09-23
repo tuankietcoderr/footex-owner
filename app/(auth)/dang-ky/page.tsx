@@ -22,15 +22,15 @@ const formSchema = z
   .object({
     username: z
       .string()
-      .min(2, {
-        message: "Tên đăng nhập phải có ít nhất 2 ký tự",
+      .min(6, {
+        message: "Tên đăng nhập phải có ít nhất 6 ký tự",
       })
       .max(20, {
         message: "Tên đăng nhập không được quá 20 ký tự",
       })
       .refine(
-        (data) => new RegExp("^\\w[\\w.]{2,18}\\w$").test(data),
-        "Tên đăng nhập không hợp lệ"
+        (data) => new RegExp("^\\w[\\w.]{4,18}\\w$").test(data),
+        "Tên đăng nhập phải có ít nhất 6 kí tự, không chứa kí tự đặc biệt và khoảng trắng"
       ),
     password: z
       .string()
@@ -75,6 +75,8 @@ const Page = () => {
       username: data.username,
       password: data.password,
       role: EUserRole.OWNER,
+      email: "",
+      teams: [],
     }
     setLoading(true)
     registerUser(processedData)

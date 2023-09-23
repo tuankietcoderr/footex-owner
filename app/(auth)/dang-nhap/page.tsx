@@ -20,13 +20,13 @@ import Link from "next/link"
 const formSchema = z.object({
   username: z
     .string()
-    .min(2, {
-      message: "Tên đăng nhập phải có ít nhất 2 ký tự",
+    .min(6, {
+      message: "Tên đăng nhập phải có ít nhất 6 ký tự",
     })
     .max(20, {
       message: "Tên đăng nhập không được quá 20 ký tự",
     })
-    .refine((data) => new RegExp("^\\w[\\w.]{2,18}\\w$").test(data), "Tên đăng nhập không hợp lệ"),
+    .refine((data) => new RegExp("^\\w[\\w.]{4,18}\\w$").test(data), "Tên đăng nhập không hợp lệ"),
   password: z
     .string()
     .min(6, {

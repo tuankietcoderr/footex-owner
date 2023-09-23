@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import IFootballShop, { EFootballShopStatus } from "@/interface/IFootballShop"
+import IOrganization, { EOrganizationStatus } from "@/interface/IOrganization"
 import {
   createBigField,
   deleteBigField,
@@ -10,15 +10,17 @@ import {
 } from "@/services/big-field"
 
 interface BigFieldStore {
-  bigFields: IFootballShop[] | null | undefined
-  bigField: IFootballShop | null | undefined
-  setBigFields: (bigFields: IFootballShop[]) => void
-  loadBigFields: () => Promise<void>
+  bigFields: IOrganization[] | null | undefined
+  bigField: IOrganization | null | undefined
+  setBigField: (bigField: IOrganization) => void
+  setBigFields: (bigFields: IOrganization[]) => void
+  loadBigFields: () => Promise<IOrganization[]>
   loadBigField: (id: string) => Promise<void>
-  addBigField: (bigField: IFootballShop) => Promise<void>
-  updateBigField: (id: string, bigField: IFootballShop) => Promise<void>
+  addBigField: (bigField: IOrganization) => Promise<IOrganization>
+  updateBigField: (id: string, bigField: IOrganization) => Promise<void>
   deleteBigField: (id: string) => Promise<void>
-  updateBigFieldStatus: (id: string, status: EFootballShopStatus) => Promise<void>
+  updateBigFieldStatus: (id: string, status: EOrganizationStatus) => Promise<void>
+  reset: (type: "all" | "single" | "multiple") => void
 }
 
 const useBigFieldStore = create<BigFieldStore>((set, get) => ({
@@ -29,9 +31,10 @@ const useBigFieldStore = create<BigFieldStore>((set, get) => ({
     const res = await getAllBigFields()
     if (res.success) {
       set({ bigFields: res.data })
+      return res.data
     } else {
       set({ bigFields: null })
-      Promise.reject(res.message)
+      throw res.message
     }
   },
   loadBigField: async (id) => {
@@ -40,17 +43,20 @@ const useBigFieldStore = create<BigFieldStore>((set, get) => ({
       set({ bigField: res.data })
     } else {
       set({ bigField: null })
-      Promise.reject(res.message)
+      throw res.message
     }
   },
+  setBigField: (bigField) => set({ bigField }),
   addBigField: async (bigField) => {
     const res = await createBigField(bigField)
     if (res.success) {
       set({
         bigFields: [...(get().bigFields || []), res.data],
+        bigField: res.data,
       })
+      return res.data
     } else {
-      Promise.reject(res.message)
+      throw res.message
     }
   },
   updateBigField: async (id, bigField) => {
@@ -64,7 +70,7 @@ const useBigFieldStore = create<BigFieldStore>((set, get) => ({
       bigFields[index] = res.data
       set({ bigFields })
     } else {
-      Promise.reject(res.message)
+      throw res.message
     }
   },
   deleteBigField: async (id) => {
@@ -73,21 +79,36 @@ const useBigFieldStore = create<BigFieldStore>((set, get) => ({
     if (res.success) {
       set({ bigFields: bigFields.filter((item) => item._id !== id) })
     } else {
-      Promise.reject(res.message)
+      throw res.message
     }
   },
   updateBigFieldStatus: async (id, status) => {
     const bigFields = get().bigFields || []
     const index = bigFields.findIndex((item) => item._id === id)
     if (index === -1) {
-      Promise.reject("Không tìm thấy sân bóng")
+      throw "Không tìm thấy sân bóng"
     }
     const res = await updateBigFieldStatus(id, status)
     if (res.success) {
       bigFields[index] = res.data
       set({ bigFields })
     } else {
-      Promise.reject(res.message)
+      throw res.message
+    }
+  },
+  reset: (type) => {
+    switch (type) {
+      case "all":
+        set({ bigFields: undefined, bigField: undefined })
+        break
+      case "single":
+        set({ bigField: undefined })
+        break
+      case "multiple":
+        set({ bigFields: undefined })
+        break
+      default:
+        break
     }
   },
 }))

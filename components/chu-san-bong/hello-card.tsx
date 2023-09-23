@@ -1,37 +1,46 @@
 "use client"
-import React from "react"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { useFieldManagementContext } from "@/context/FieldManagementContext"
 import HiddenPerson from "@/illustrations/hidden-person"
-import { Button } from "../ui/button"
-import { Plus } from "lucide-react"
+import useBigFieldStore from "@/store/useBigFieldStore"
 import useUserStore from "@/store/useUserStore"
+import { Plus } from "lucide-react"
 import BlurElement from "../blur-element"
+import HelloCard from "../hello-card"
+import { Button } from "../ui/button"
 
-const HelloCard = () => {
+const HelloDashboard = () => {
   const { user } = useUserStore()
+  const { bigField } = useBigFieldStore()
+  const { openCreateModal } = useFieldManagementContext()
   return (
     <BlurElement>
-      <Card className="relative flex h-full flex-col justify-between overflow-hidden">
-        <CardHeader className="text-2xl">
-          <CardTitle>
-            Xin chào <b className="underline">{user?.name}</b>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <HelloCard
+        title={
+          <p className="z-[2]">
+            Xin chào <strong className="underline">{user?.name}</strong>!
+          </p>
+        }
+        content={
           <div className="flex justify-between">
             <p className="z-[2]">
               Chào mừng bạn đến với trang quản lý dành cho{" "}
               <strong className="underline">Chủ sân bóng</strong>!
+              <br />
+              {bigField && (
+                <>
+                  Bạn đang quản lý sân bóng <strong className="underline">{bigField?.name}</strong>
+                </>
+              )}
             </p>
             <HiddenPerson
               fill="var(--primary)"
               className="absolute -right-6 bottom-4 z-[1] w-32 fill-primary dark:opacity-50"
             />
           </div>
-        </CardContent>
-        <CardFooter>
-          <div className="z-[2] flex gap-4">
-            <Button>
+        }
+        footer={
+          <>
+            <Button onClick={openCreateModal}>
               <Plus size={20} />
               <span className="ml-2">Thêm sân</span>
             </Button>
@@ -39,11 +48,11 @@ const HelloCard = () => {
               <Plus size={20} />
               <span className="ml-2">Thêm giải đấu</span>
             </Button>
-          </div>
-        </CardFooter>
-      </Card>
+          </>
+        }
+      />
     </BlurElement>
   )
 }
 
-export default HelloCard
+export default HelloDashboard

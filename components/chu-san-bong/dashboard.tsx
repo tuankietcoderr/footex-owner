@@ -1,6 +1,6 @@
 import CustomerBook from "./customer-book"
 import CustomerCancel from "./customer-cancel"
-import HelloCard from "./hello-card"
+import HelloDashboard from "./hello-card"
 import Profit from "./profit"
 import Rating from "./rating"
 import Revenue from "./revenue"
@@ -9,7 +9,7 @@ import Transactions from "./transactions"
 const Dashboard = () => {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-[60%_auto_auto]">
-      <HelloCard />
+      <HelloDashboard />
       <Profit />
       <Transactions />
       <Revenue />

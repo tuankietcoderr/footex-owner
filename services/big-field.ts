@@ -1,9 +1,9 @@
 import apiInstance from "@/api/instance"
-import IFootballShop, { EFootballShopStatus } from "@/interface/IFootballShop"
+import IOrganization, { EOrganizationStatus } from "@/interface/IOrganization"
 
-const createBigField = async (data: IFootballShop) => {
+const createBigField = async (data: IOrganization) => {
   try {
-    const res = await apiInstance.post("/football-shop", data)
+    const res = await apiInstance.post("/organization", data)
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
@@ -12,7 +12,7 @@ const createBigField = async (data: IFootballShop) => {
 
 const getAllBigFields = async () => {
   try {
-    const res = await apiInstance.get("/football-shop")
+    const res = await apiInstance.get("/organization")
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
@@ -21,7 +21,7 @@ const getAllBigFields = async () => {
 
 const getOwnerBigFields = async () => {
   try {
-    const res = await apiInstance.get("/football-shop/owner")
+    const res = await apiInstance.get("/organization/owner")
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
@@ -30,16 +30,16 @@ const getOwnerBigFields = async () => {
 
 const getBigFieldById = async (id: string) => {
   try {
-    const res = await apiInstance.get(`/football-shop/${id}`)
+    const res = await apiInstance.get(`/organization/${id}`)
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
   }
 }
 
-const updateBigField = async (id: string, data: IFootballShop) => {
+const updateBigField = async (id: string, data: IOrganization) => {
   try {
-    const res = await apiInstance.put(`/football-shop/${id}`, data)
+    const res = await apiInstance.put(`/organization/${id}`, data)
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
@@ -48,16 +48,16 @@ const updateBigField = async (id: string, data: IFootballShop) => {
 
 const deleteBigField = async (id: string) => {
   try {
-    const res = await apiInstance.delete(`/football-shop/${id}`)
+    const res = await apiInstance.delete(`/organization/${id}`)
     return res.data
   } catch (error: any) {
     return error?.response?.data ?? error.message
   }
 }
 
-const updateBigFieldStatus = async (id: string, status: EFootballShopStatus) => {
+const updateBigFieldStatus = async (id: string, status: EOrganizationStatus) => {
   try {
-    const res = await apiInstance.put(`/football-shop/status/${id}`, {
+    const res = await apiInstance.put(`/organization/status/${id}`, {
       status,
     })
     return res.data

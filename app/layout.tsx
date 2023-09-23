@@ -3,12 +3,14 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter, Lexend } from "next/font/google"
 import React from "react"
-import OwnerNav from "@/components/nav/OwnerNav"
+import OwnerNav from "@/components/nav/owner-nav"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthModalProvider } from "@/context/AuthModalContext"
 import AuthProvider from "./provider"
 import { Toaster } from "@/components/ui/toaster"
 import UnAuthProvider from "@/context/UnAuthProvider"
+import { BigFieldManagementProvider } from "@/context/BigFieldManagementContext"
+import { FieldManagementProvider } from "@/context/FieldManagementContext"
 
 const inter = Lexend({ subsets: ["latin", "vietnamese"] })
 
@@ -29,16 +31,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <AuthProvider>
             <AuthModalProvider>
-              <div className="grid md:grid-cols-[260px_auto] ">
-                <OwnerSideBar />
-                <div className="max-h-screen min-h-screen overflow-auto p-4">
-                  <OwnerNav />
-                  <div className="py-4">
-                    <UnAuthProvider>{children}</UnAuthProvider>
+              <BigFieldManagementProvider>
+                <FieldManagementProvider>
+                  <div className="grid md:grid-cols-[260px_auto] ">
+                    <OwnerSideBar />
+                    <div className="max-h-screen min-h-screen overflow-auto p-4">
+                      <OwnerNav />
+                      <div className="py-4">
+                        <UnAuthProvider>{children}</UnAuthProvider>
+                      </div>
+                      <Toaster />
+                    </div>
                   </div>
-                  <Toaster />
-                </div>
-              </div>
+                </FieldManagementProvider>
+              </BigFieldManagementProvider>
             </AuthModalProvider>
           </AuthProvider>
         </ThemeProvider>

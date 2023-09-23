@@ -51,6 +51,7 @@ export function ComboBox({data,initialText="Chọn", onChange, className, value:
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Tìm kiếm..." className="h-9" />
@@ -59,8 +60,8 @@ export function ComboBox({data,initialText="Chọn", onChange, className, value:
             <div className="max-h-[200px] overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-rounded">
             {data.map((d) => (
               <CommandItem
-              key={d.value}
-              value={d.value}
+                key={d.value}
+                value={d.value}
                 onSelect={(currentValue: any) => {
                   setValue(currentValue === value ? "" : currentValue)
                   onChange && onChange(currentValue)
