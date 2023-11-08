@@ -16,4 +16,5 @@ export default interface IField {
   image?: string
   status?: EFieldStatus
   branch?: string | IBranch
+  description: string
 }

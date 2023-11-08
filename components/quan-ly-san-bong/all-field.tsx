@@ -5,6 +5,7 @@ import BlurElement from "../blur-element"
 import EmptyResult from "../result/empty-result"
 import ErrorResult from "../result/error-result"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
+import { EFieldStatus } from "@/interface/IField"
 
 const FieldItem = dynamic(() => import("./field-item").then((mod) => mod.default), { ssr: false })
 
@@ -12,7 +13,11 @@ const AllField = () => {
   const { fields } = useFieldStore()
   const [filter, setFilter] = useState("all")
   const filteredFields = fields?.filter((field) =>
-    filter === "busy" ? field.is_being_used : filter === "active" ? !field.is_being_used : true
+    filter === "busy"
+      ? field.status === EFieldStatus.BUSY
+      : filter === "active"
+      ? field.status === EFieldStatus.ACTIVE
+      : true
   )
   const Fields = useCallback(() => {
     return (
