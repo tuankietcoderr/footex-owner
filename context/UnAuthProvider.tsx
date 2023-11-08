@@ -1,26 +1,21 @@
 "use client"
 import UnAuthorized from "@/components/un-authorized"
-import UnOrg from "@/components/un-org"
-import UnRight from "@/components/un-right"
-import { EUserRole } from "@/interface/IUser"
-import useBigFieldStore from "@/store/useBigFieldStore"
-import useUserStore from "@/store/useUserStore"
+import UnBranch from "@/components/un-branch"
+import useBranchStore from "@/store/useBranchStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import { usePathname } from "next/navigation"
 import { PropsWithChildren } from "react"
 
 export default function UnAuthProvider({ children }: PropsWithChildren) {
-  const { user } = useUserStore()
-  const { bigFields } = useBigFieldStore()
+  const { owner } = useOwnerStore()
+  const { branches } = useBranchStore()
   const pathname = usePathname()
-  if (user === null && pathname !== "/dang-nhap" && pathname !== "/dang-ky") {
+  if (owner === null && pathname !== "/dang-nhap" && pathname !== "/dang-ky") {
     return <UnAuthorized />
   }
-  if (user && user.role === EUserRole.GUEST) {
-    return <UnRight />
-  }
 
-  if (user && bigFields && bigFields?.length === 0) {
-    return <UnOrg />
+  if (owner && branches && branches?.length === 0) {
+    return <UnBranch />
   }
   return children
 }

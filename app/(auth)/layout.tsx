@@ -1,5 +1,5 @@
 "use client"
-import useUserStore from "@/store/useUserStore"
+import useUserStore from "@/store/useOwnerStore"
 import React, { PropsWithChildren } from "react"
 import { redirect } from "next/navigation"
 import { useAuthModalContext } from "@/context/AuthModalContext"

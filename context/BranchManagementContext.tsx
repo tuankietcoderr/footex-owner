@@ -1,55 +1,46 @@
 "use client"
 // import CreateOrg from "@/components/modal/create-org"
 import { COMMON } from "@/constants/common"
-import useBigFieldStore from "@/store/useBigFieldStore"
+import useBranchStore from "@/store/useBranchStore"
 import useFieldStore from "@/store/useFieldStore"
 import React, { createContext, useState, useContext, useEffect } from "react"
 import dynamic from "next/dynamic"
 
-const CreateOrg = dynamic(() => import("@/components/modal/create-org"), { ssr: false })
+const CreateOrg = dynamic(() => import("@/components/modal/create-branch"), { ssr: false })
 
-interface IBigFieldManagementContext {
+interface IBranchManagementContext {
   isCreateModalShown: boolean
   setIsCreateModalShown: React.Dispatch<React.SetStateAction<boolean>>
   openModal?: () => void
   closeModal?: () => void
 }
 
-export const BigFieldManagementContext = createContext<IBigFieldManagementContext>({
+export const BranchManagementContext = createContext<IBranchManagementContext>({
   isCreateModalShown: false,
   setIsCreateModalShown: () => {},
 })
 
-export const BigFieldManagementProvider = ({ children }: React.PropsWithChildren<{}>) => {
-  const { bigFields, setBigField, bigField } = useBigFieldStore()
+export const BranchManagementProvider = ({ children }: React.PropsWithChildren<{}>) => {
+  const { branch, loadBranch } = useBranchStore()
   const { getFieldsOfOrg, reset } = useFieldStore()
   const [isCreateModalShown, setIsCreateModalShown] = useState(false)
   useEffect(() => {
-    if (bigFields && bigFields.length > 0 && !bigField) {
+    if (!branch) {
       const lastOrgId = localStorage.getItem(COMMON.LAST_ORG_ID)
-      const firstOrg = bigFields[0]
       if (lastOrgId) {
-        const lastOrg = bigFields.find((org) => org?._id === lastOrgId)
-        if (lastOrg) {
-          setBigField(lastOrg)
-          return
-        } else {
-          setBigField(firstOrg)
-        }
-      } else {
-        setBigField(firstOrg)
+        loadBranch(lastOrgId)
       }
     } else {
       localStorage.removeItem(COMMON.LAST_ORG_ID)
     }
-  }, [bigFields])
+  }, [branch])
 
   useEffect(() => {
-    if (bigField) {
-      localStorage.setItem(COMMON.LAST_ORG_ID, bigField?._id!)
-      getFieldsOfOrg(bigField?._id!)
+    if (branch) {
+      localStorage.setItem(COMMON.LAST_ORG_ID, branch?._id!)
+      getFieldsOfOrg(branch?._id!)
     }
-  }, [bigField])
+  }, [branch])
 
   const openModal = () => {
     setIsCreateModalShown(true)
@@ -66,13 +57,13 @@ export const BigFieldManagementProvider = ({ children }: React.PropsWithChildren
     closeModal,
   }
   return (
-    <BigFieldManagementContext.Provider value={value}>
+    <BranchManagementContext.Provider value={value}>
       {children}
       <CreateOrg visible={isCreateModalShown} onClose={closeModal} />
-    </BigFieldManagementContext.Provider>
+    </BranchManagementContext.Provider>
   )
 }
 
-export const useBigFieldManagementContext = () => {
-  return useContext(BigFieldManagementContext)
+export const useBranchManagementContext = () => {
+  return useContext(BranchManagementContext)
 }

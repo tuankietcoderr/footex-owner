@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils"
-import useUserStore from "@/store/useUserStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import React from "react"
 import { Skeleton } from "./ui/skeleton"
 
@@ -10,8 +10,8 @@ type BlurElementProps = {
 } & React.PropsWithChildren
 
 const BlurElement = ({ children, wrapperClassname, visible }: BlurElementProps) => {
-  const { user } = useUserStore()
-  const visibleBlur = visible !== undefined ? visible && user === undefined : user === undefined
+  const { owner } = useOwnerStore()
+  const visibleBlur = visible !== undefined ? visible && owner === undefined : owner === undefined
   return !visibleBlur ? (
     children
   ) : (

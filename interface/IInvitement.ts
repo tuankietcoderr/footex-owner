@@ -1,5 +1,5 @@
 import ITeam from "./ITeam"
-import IUser from "./IUser"
+import IUser from "./IOwner"
 
 export enum EInvitementStatus {
   PENDING = "PENDING",

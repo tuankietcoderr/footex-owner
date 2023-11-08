@@ -1,7 +1,6 @@
 "use client"
 // import NotOwner from "@/components/modal/not-owner"
-import { EUserRole } from "@/interface/IUser"
-import useUserStore from "@/store/useUserStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import { redirect, usePathname } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import dynamic from "next/dynamic"
@@ -28,11 +27,11 @@ export const AuthModalContext = createContext<IAuthModalContext>({
 export const AuthModalProvider = ({ children }: PropsWithChildren) => {
   const [visible, setVisible] = useState(false)
   const [fallbackUrl, setFallbackUrl] = useState<string>("/")
-  const { user } = useUserStore()
+  const { owner } = useOwnerStore()
   const pathName = usePathname()
   const openModal = (): boolean => {
     if (visible) return false
-    if (user === null || (user && user.role === EUserRole.GUEST)) {
+    if (owner === null) {
       setVisible(true)
       setFallbackUrl(pathName)
       return true

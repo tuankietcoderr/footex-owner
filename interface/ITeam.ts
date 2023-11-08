@@ -1,4 +1,4 @@
-import IUser from "./IUser"
+import IUser from "./IOwner"
 
 export default interface ITeam {
   _id?: string

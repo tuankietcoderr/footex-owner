@@ -1,11 +1,13 @@
 import { COMMON } from "@/constants/common"
 import axios from "axios"
 
+export const API_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.NEXT_PUBLIC_DEV_API
+    : process.env.NEXT_PUBLIC_PROD_API
+
 let apiInstance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:2003/api"
-      : "https://footex.up.railway.app/api",
+  baseURL: API_URL,
 })
 
 apiInstance.interceptors.request.use(async (config) => {

@@ -1,18 +1,18 @@
-import React from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
+import IField from "@/interface/IField"
+import useBranchStore from "@/store/useBranchStore"
+import useFieldStore from "@/store/useFieldStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import { zodResolver } from "@hookform/resolvers/zod"
+import React from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "../ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { toDot } from "@/lib/converter"
-import useUserStore from "@/store/useUserStore"
 import { Textarea } from "../ui/textarea"
-import useFieldStore from "@/store/useFieldStore"
 import { useToast } from "../ui/use-toast"
-import useBigFieldStore from "@/store/useBigFieldStore"
-import IField from "@/interface/IField"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 const formSchema = z.object({
   name: z
@@ -23,14 +23,9 @@ const formSchema = z.object({
     .min(6, {
       message: "Tên sân bóng không được ít hơn 6 ký tự",
     }),
-  price: z
-    .number()
-    .max(1000000000, {
-      message: "Giá tiền không được quá 1 tỷ",
-    })
-    .min(1000, {
-      message: "Giá tiền không được ít hơn 1 nghìn",
-    }),
+  price: z.number().min(1, {
+    message: "Giá tiền không được ít hơn 1",
+  }),
   description: z
     .string()
     .max(5000, {
@@ -39,6 +34,7 @@ const formSchema = z.object({
     .min(6, {
       message: "Mô tả không được ít hơn 6 ký tự",
     }),
+  type: z.number({ required_error: "Loại sân không được để trống" }),
 })
 
 type CreateFieldModalProps = {
@@ -53,6 +49,7 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
       name: "",
       price: 0,
       description: "",
+      type: 5,
     },
   })
 
@@ -62,18 +59,18 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
     }
   }
 
-  const { user } = useUserStore()
+  const { owner } = useOwnerStore()
   const { addField } = useFieldStore()
-  const { bigField } = useBigFieldStore()
+  const { branch } = useBranchStore()
   const [loading, setLoading] = React.useState(false)
   const { toast } = useToast()
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log({ data })
     setLoading(true)
     const sendData: IField = {
       ...data,
-      organization: bigField?._id!,
-      is_being_used: false,
+      branch: branch?._id,
     }
     await addField(sendData)
       .then((res) => {
@@ -94,9 +91,8 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
         setLoading(false)
       })
   }
-
   return (
-    <Dialog open={!!user && visible} onOpenChange={onOpenChange}>
+    <Dialog open={!!owner && visible} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tạo sân bóng</DialogTitle>
@@ -121,10 +117,10 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Giá sân</FormLabel>
+                  <FormLabel>Giá sân (Hệ số 1000, ví dụ: nhập 100 -&gt; 100000)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={toDot(130000)}
+                      placeholder={String(130)}
                       {...field}
                       onChange={(e) => {
                         if (!e.target.value) return field.onChange?.("")
@@ -133,6 +129,28 @@ const CreateFieldModal = ({ onClose, visible = false }: CreateFieldModalProps) =
                       type="number"
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Loại sân</FormLabel>
+                  <Select onValueChange={(v) => field.onChange(parseInt(v))}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn loại sân" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={String(5)}>Sân 5</SelectItem>
+                      <SelectItem value={String(7)}>Sân 7</SelectItem>
+                      <SelectItem value={String(11)}>Sân 11</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

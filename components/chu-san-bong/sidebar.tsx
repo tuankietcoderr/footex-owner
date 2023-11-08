@@ -1,9 +1,9 @@
 "use client"
-import { Building, Dice6, Home, LucideIcon, Trophy, Users2 } from "lucide-react"
+import { Building, Dice6, Home, LucideIcon, Trophy, User2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import OwnerSidebarItem from "./sidebar-item"
-import useUserStore from "@/store/useUserStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import { Skeleton } from "../ui/skeleton"
 
 export interface IOwnerSideBarNavItem {
@@ -13,7 +13,7 @@ export interface IOwnerSideBarNavItem {
 }
 
 const OwnerSideBar = () => {
-  const { user } = useUserStore()
+  const { owner } = useOwnerStore()
   const sidebarNav: IOwnerSideBarNavItem[] = [
     {
       icon: Home,
@@ -31,14 +31,14 @@ const OwnerSideBar = () => {
       link: "/quan-ly-giai-dau",
     },
     {
-      icon: Users2,
+      icon: User2,
       label: "Quản lý khách hàng",
       link: "/quan-ly-khach-hang",
     },
     {
       icon: Building,
-      label: "Quản lý tổ chức",
-      link: "/quan-ly-to-chuc",
+      label: "Quản lý chi nhánh",
+      link: "/quan-ly-chi-nhanh",
     },
   ]
 
@@ -54,7 +54,7 @@ const OwnerSideBar = () => {
         />
       </Link>
       <div className="mt-8 w-full">
-        {user !== undefined
+        {owner !== undefined
           ? sidebarNav.map((navItem, index) => (
               <OwnerSidebarItem
                 key={navItem.link}

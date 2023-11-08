@@ -16,9 +16,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
-import useUserStore from "@/store/useUserStore"
-import useBigFieldStore from "@/store/useBigFieldStore"
+import useOwnerStore from "@/store/useOwnerStore"
+import useBranchStore from "@/store/useBranchStore"
 import { useToast } from "../ui/use-toast"
+import Address from "../address"
 
 const formSchema = z
   .object({
@@ -38,15 +39,7 @@ const formSchema = z
       .min(6, {
         message: "Mô tả không được ít hơn 6 ký tự",
       }),
-    address: z
-      .string()
-      .max(200, {
-        message: "Địa chỉ không được quá 200 ký tự",
-      })
-      .min(6, {
-        message: "Địa chỉ không được ít hơn 6 ký tự",
-      }),
-    phone_number: z
+    phoneNumber: z
       .string()
       .max(10, {
         message: "Số điện thoại không được quá 10 ký tự",
@@ -63,10 +56,7 @@ const formSchema = z
           message: "Số điện thoại không hợp lệ",
         }
       ),
-    email: z.string().email({
-      message: "Email không hợp lệ",
-    }),
-    active_at: z
+    openAt: z
       .number()
       .int()
       .min(1, {
@@ -75,7 +65,7 @@ const formSchema = z
       .max(23, {
         message: "Thời gian mở cửa không được lớn hơn 23",
       }),
-    inactive_at: z
+    closeAt: z
       .number()
       .int()
       .min(1, {
@@ -84,10 +74,15 @@ const formSchema = z
       .max(23, {
         message: "Thời gian đóng cửa không được lớn hơn 23",
       }),
+    city: z.string().nonempty({ message: "Tỉnh/thành phố không được để trống" }),
+    district: z.string().nonempty({ message: "Quận/huyện không được để trống" }),
+    ward: z.string().nonempty({ message: "Phường/xã không được để trống" }),
+    street: z.string(),
+    houseNumber: z.string(),
   })
-  .refine((data) => data.active_at <= data.inactive_at, {
+  .refine((data) => data.openAt <= data.closeAt, {
     message: "Thời gian đóng cửa không được nhỏ hơn thời gian mở cửa",
-    path: ["inactive_at"],
+    path: ["closeAt"],
   })
 
 type Props = {
@@ -95,19 +90,22 @@ type Props = {
   onClose: () => void
 }
 
-const CreateOrg = ({ onClose, visible }: Props) => {
-  const { user } = useUserStore()
-  const { bigField, addBigField } = useBigFieldStore()
+const CreateBranch = ({ onClose, visible }: Props) => {
+  const { owner } = useOwnerStore()
+  const { branch, addBranch } = useBranchStore()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      address: "",
-      phone_number: user?.phone_number || "",
-      email: user?.email || "",
-      active_at: 7,
-      inactive_at: new Date().getHours(),
+      phoneNumber: owner?.phoneNumber || "",
+      openAt: new Date().getHours(),
+      closeAt: (new Date().getHours() + 7) % 23,
+      city: "",
+      district: "",
+      ward: "",
+      street: "",
+      houseNumber: "",
     },
   })
 
@@ -128,7 +126,7 @@ const CreateOrg = ({ onClose, visible }: Props) => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true)
-    await addBigField(data)
+    await addBranch(data)
       .then((res) => {
         toast({
           title: "Tạo cơ sở thành công",
@@ -189,22 +187,10 @@ const CreateOrg = ({ onClose, visible }: Props) => {
                     </FormItem>
                   )}
                 />
+                <Address />
                 <FormField
                   control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Địa chỉ</FormLabel>
-                      <FormControl>
-                        <Input placeholder={"Nhập địa chỉ..."} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phone_number"
+                  name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Số điện thoại liên hệ</FormLabel>
@@ -215,25 +201,12 @@ const CreateOrg = ({ onClose, visible }: Props) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email cơ sở</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nhập email cơ sở..." {...field} type="email" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </TabsContent>
               <TabsContent value="detail-info" className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="active_at"
+                    name="openAt"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Thời gian mở cửa</FormLabel>
@@ -254,7 +227,7 @@ const CreateOrg = ({ onClose, visible }: Props) => {
                   />
                   <FormField
                     control={form.control}
-                    name="inactive_at"
+                    name="closeAt"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Thời gian đóng cửa</FormLabel>
@@ -305,4 +278,4 @@ const CreateOrg = ({ onClose, visible }: Props) => {
   )
 }
 
-export default CreateOrg
+export default CreateBranch

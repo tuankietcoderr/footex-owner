@@ -1,26 +1,26 @@
 "use client"
-import useBigFieldStore from "@/store/useBigFieldStore"
-import useUserStore from "@/store/useUserStore"
+import useBranchStore from "@/store/useBranchStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import React, { PropsWithChildren, useEffect } from "react"
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
-  const { loadUser, user } = useUserStore()
-  const { loadBigFields, reset } = useBigFieldStore()
+  const { loadOwner, owner } = useOwnerStore()
+  const { loadBranches, reset } = useBranchStore()
   useEffect(() => {
     ;(async () => {
-      await loadUser()
+      await loadOwner()
     })()
   }, [])
 
   useEffect(() => {
-    if (user) {
-      loadBigFields()
+    if (owner) {
+      loadBranches()
     }
-  }, [user])
+  }, [owner])
 
   // useEffect(() => {
   //   if()
-  // }, [user])
+  // }, [owner])
 
   return children
 }

@@ -1,6 +1,6 @@
 "use client"
 import FootballGoalSemi from "@/illustrations/football-goal-semi"
-import IField from "@/interface/IField"
+import IField, { EFieldStatus } from "@/interface/IField"
 import { toDot } from "@/lib/converter"
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
@@ -10,19 +10,19 @@ import { Button } from "../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "../ui/card"
 import BlurElement from "../blur-element"
 
-const FieldItem = ({ name, _id, description, is_being_used, price, thumbnail }: IField) => {
+const FieldItem = ({ name, _id, description, status, price, type, image }: IField) => {
   return (
     <BlurElement visible={_id === undefined}>
       <div className="min-w-[300px] rounded-lg border border-border shadow-sm">
         <div className="">
-          {thumbnail ? (
+          {image ? (
             <Image
-              src={thumbnail}
+              src={image}
               width={400}
               height={400}
               loader={({ src }) => src}
               alt={name}
-              className="w-full object-cover"
+              className="w-full rounded-t-md object-cover"
             />
           ) : (
             <FootballGoalSemi fill="var(--primary)" className="fill-primary" />
@@ -36,13 +36,14 @@ const FieldItem = ({ name, _id, description, is_being_used, price, thumbnail }: 
             <CardContent>
               <CardDescription>
                 {name && <p className="text-xl font-semibold">{name}</p>}
-                <CardDescription>
-                  {!is_being_used ? (
-                    <span className="text-green-500">Đang trống</span>
-                  ) : (
-                    <span className="text-red-400">Đang được sử dụng</span>
-                  )}
-                </CardDescription>
+                {status === EFieldStatus.ACTIVE ? (
+                  <span className="text-green-500">Đang trống</span>
+                ) : (
+                  <span className="text-red-400">Đang được sử dụng</span>
+                )}
+                <p>
+                  Sân <b>{type}</b>
+                </p>
               </CardDescription>
             </CardContent>
             <CardFooter className="flex items-center justify-between">

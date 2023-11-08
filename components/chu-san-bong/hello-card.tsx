@@ -1,23 +1,24 @@
 "use client"
 import { useFieldManagementContext } from "@/context/FieldManagementContext"
 import HiddenPerson from "@/illustrations/hidden-person"
-import useBigFieldStore from "@/store/useBigFieldStore"
-import useUserStore from "@/store/useUserStore"
+import useBranchStore from "@/store/useBranchStore"
+import useOwnerStore from "@/store/useOwnerStore"
 import { Plus } from "lucide-react"
 import BlurElement from "../blur-element"
 import HelloCard from "../hello-card"
 import { Button } from "../ui/button"
 
 const HelloDashboard = () => {
-  const { user } = useUserStore()
-  const { bigField } = useBigFieldStore()
+  const { owner } = useOwnerStore()
+  const { branch } = useBranchStore()
   const { openCreateModal } = useFieldManagementContext()
+  console.log({ branch })
   return (
     <BlurElement>
       <HelloCard
         title={
           <p className="z-[2]">
-            Xin chào <strong className="underline">{user?.name}</strong>!
+            Xin chào <strong className="underline">{owner?.name}</strong>!
           </p>
         }
         content={
@@ -26,9 +27,9 @@ const HelloDashboard = () => {
               Chào mừng bạn đến với trang quản lý dành cho{" "}
               <strong className="underline">Chủ sân bóng</strong>!
               <br />
-              {bigField && (
+              {branch && (
                 <>
-                  Bạn đang quản lý sân bóng <strong className="underline">{bigField?.name}</strong>
+                  Bạn đang quản lý sân bóng <strong className="underline">{branch?.name}</strong>
                 </>
               )}
             </p>

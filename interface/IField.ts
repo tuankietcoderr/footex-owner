@@ -1,13 +1,19 @@
-import IOrganization from "./IOrganization"
+import IBranch from "./IBranch"
+import IOrganization from "./IBranch"
+
+export enum EFieldStatus {
+  ACTIVE = "active",
+  BUSY = "busy",
+  MAINTAINING = "maintaining",
+  DELETED = "deleted",
+}
 
 export default interface IField {
   _id?: string
-  organization: string | IOrganization
   name: string
   price: number
-  description?: string
-  is_being_used: boolean
-  images?: string[]
-  thumbnail?: string
-  rating?: number
+  type: number
+  image?: string
+  status?: EFieldStatus
+  branch?: string | IBranch
 }

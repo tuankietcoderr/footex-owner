@@ -27,11 +27,13 @@ const useFieldStore = create<IFieldStore>((set, get) => ({
     }
   },
   getFieldsOfOrg: async (orgId) => {
+    set({ fields: undefined })
     const res = await getFieldsOfOrganization(orgId)
     if (res.success) {
       set({ fields: res.data.reverse() })
       return res.data
     } else {
+      set({ fields: null })
       return Promise.reject(res.message)
     }
   },

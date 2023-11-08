@@ -1,4 +1,5 @@
 "use client"
+import Address from "@/components/address"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -10,8 +11,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
-import IUser, { EUserRole } from "@/interface/IUser"
-import useUserStore from "@/store/useUserStore"
+import IOwner from "@/interface/IOwner"
+import useUserStore from "@/store/useOwnerStore"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useState } from "react"
@@ -20,18 +21,6 @@ import * as z from "zod"
 
 const formSchema = z
   .object({
-    username: z
-      .string()
-      .min(6, {
-        message: "Tên đăng nhập phải có ít nhất 6 ký tự",
-      })
-      .max(20, {
-        message: "Tên đăng nhập không được quá 20 ký tự",
-      })
-      .refine(
-        (data) => new RegExp("^\\w[\\w.]{4,18}\\w$").test(data),
-        "Tên đăng nhập phải có ít nhất 6 kí tự, không chứa kí tự đặc biệt và khoảng trắng"
-      ),
     password: z
       .string()
       .min(6, {
@@ -47,7 +36,13 @@ const formSchema = z
       ),
     confirm: z.string(),
     name: z.string().min(2, { message: "Tên phải có ít nhất 2 ký tự" }),
-    isOwner: z.boolean(),
+    email: z.string().email({ message: "Email không hợp lệ" }),
+    phoneNumber: z.string(),
+    city: z.string().nonempty({ message: "Tỉnh/thành phố không được để trống" }),
+    district: z.string().nonempty({ message: "Quận/huyện không được để trống" }),
+    ward: z.string().nonempty({ message: "Phường/xã không được để trống" }),
+    street: z.string(),
+    houseNumber: z.string(),
   })
   .refine((data) => data.password === data.confirm, {
     message: "Mật khẩu không khớp",
@@ -58,28 +53,25 @@ const Page = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       password: "",
       name: "",
       confirm: "",
-      isOwner: true,
+      city: "",
+      district: "",
+      ward: "",
+      street: "",
+      houseNumber: "",
+      phoneNumber: "",
+      email: "",
     },
   })
-
-  const { registerUser } = useUserStore()
+  const { registerOwner } = useUserStore()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const processedData: IUser = {
-      name: data.name,
-      username: data.username,
-      password: data.password,
-      role: EUserRole.OWNER,
-      email: "",
-      teams: [],
-    }
+    const processedData: IOwner = data
     setLoading(true)
-    registerUser(processedData)
+    registerOwner(processedData)
       .then(() => {
         toast({
           title: "Đăng ký thành công",
@@ -117,17 +109,33 @@ const Page = () => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tên người dùng</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="footex" {...field} />
+                <Input placeholder="footexuser@footex.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Số điện thoại</FormLabel>
+              <FormControl>
+                <Input placeholder="0123456789" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Address />
+
         <FormField
           control={form.control}
           name="password"
@@ -154,7 +162,12 @@ const Page = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={loading}
+          onClick={() => console.log(form.getValues())}
+        >
           {!loading ? "Đăng ký" : "Đang đăng ký..."}
         </Button>
         <Button className="w-full" asChild variant={"outline"}>

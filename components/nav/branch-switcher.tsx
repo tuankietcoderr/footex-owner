@@ -14,10 +14,10 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { useBigFieldManagementContext } from "@/context/BigFieldManagementContext"
-import IOrganization from "@/interface/IOrganization"
+import { useBranchManagementContext } from "@/context/BranchManagementContext"
+import IOrganization from "@/interface/IBranch"
 import { cn } from "@/lib/utils"
-import useBigFieldStore from "@/store/useBigFieldStore"
+import useBranchStore from "@/store/useBranchStore"
 import { Skeleton } from "../ui/skeleton"
 import { useAuthModalContext } from "@/context/AuthModalContext"
 
@@ -25,9 +25,9 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
 interface TeamSwitcherProps extends PopoverTriggerProps {}
 
-export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
-  const { bigFields, bigField, setBigField } = useBigFieldStore()
-  const { openModal } = useBigFieldManagementContext()
+export default function BranchSwitcher({ className }: TeamSwitcherProps) {
+  const { branches, branch, setBranch } = useBranchStore()
+  const { openModal } = useBranchManagementContext()
   const { mustAuthorize } = useAuthModalContext()
   const [open, setOpen] = React.useState(false)
 
@@ -38,7 +38,7 @@ export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
 
   const onSelectOrg = (org: IOrganization) => {
     setOpen(false)
-    setBigField(org)
+    setBranch(org)
   }
 
   const onOpenChange = (open: boolean) => {
@@ -49,7 +49,7 @@ export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
-      {bigFields === undefined ? (
+      {branches === undefined ? (
         <Skeleton className="w-[200px]" />
       ) : (
         <PopoverTrigger asChild>
@@ -61,10 +61,10 @@ export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
             className={cn("justify-between", className)}
           >
             <Avatar className="mr-2 h-8 w-8">
-              <AvatarImage src={bigField?.logo} alt={bigField?.name} />
-              <AvatarFallback>{bigField?.name?.substring(0, 2) || "GE"}</AvatarFallback>
+              <AvatarImage src={branch?.logo} alt={branch?.name} />
+              <AvatarFallback>{branch?.name?.substring(0, 2) || "GE"}</AvatarFallback>
             </Avatar>
-            <p className="line-clamp-1">{bigField?.name || "Chọn một cơ sở"}</p>
+            <p className="line-clamp-1">{branch?.name || "Chọn một cơ sở"}</p>
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -75,17 +75,17 @@ export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
             <CommandInput placeholder="Tìm kiếm sân bóng..." />
             <CommandEmpty>Không có kết quả</CommandEmpty>
             <CommandGroup>
-              {bigFields !== undefined && (bigFields === null || bigFields?.length === 0) ? (
+              {branches !== undefined && (branches === null || branches?.length === 0) ? (
                 <p className="p-2 text-center text-xs text-gray-500">Chưa có gì</p>
               ) : (
-                bigFields?.map((bf, index) => (
+                branches?.map((bf, index) => (
                   <CommandItem
                     key={bf?._id}
                     onSelect={() => onSelectOrg(bf)}
                     value={bf?.name + index.toString()}
                     className="text-sm"
                   >
-                    <Avatar className="mr-2 h-5 w-5">
+                    <Avatar className="mr-2 h-8 w-8">
                       <AvatarImage src={bf.logo} alt={bf.name} className="grayscale" />
                       <AvatarFallback>{bf.name?.substring(0, 2)}</AvatarFallback>
                     </Avatar>
@@ -93,7 +93,7 @@ export default function BigFieldSwitcher({ className }: TeamSwitcherProps) {
                     <CheckIcon
                       className={cn(
                         "ml-auto min-h-[1rem] min-w-[1rem]",
-                        bigField?._id === bf._id ? "opacity-100" : "opacity-0"
+                        branch?._id === bf._id ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

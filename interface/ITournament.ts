@@ -1,4 +1,4 @@
-import IOrganization from "./IOrganization"
+import IOrganization from "./IBranch"
 
 export interface ISponsor {
   name: string
