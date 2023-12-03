@@ -1,4 +1,3 @@
-import OwnerSideBar from "@/components/chu-san-bong/sidebar"
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter, Lexend } from "next/font/google"
@@ -11,6 +10,10 @@ import { Toaster } from "@/components/ui/toaster"
 import UnAuthProvider from "@/context/UnAuthProvider"
 import { BranchManagementProvider } from "@/context/BranchManagementContext"
 import { FieldManagementProvider } from "@/context/FieldManagementContext"
+import { TournamentManagementProvider } from "@/context/TournamentManagementContext"
+import { PrizeManagementProvider } from "@/context/PrizeManagementContext"
+import OwnerSideBar from "./dashboard/_components/sidebar"
+import { FieldBookedQueueManagementProvider } from "@/context/FieldBookedQueueManagementContext"
 
 const inter = Lexend({ subsets: ["latin", "vietnamese"] })
 
@@ -33,16 +36,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <AuthModalProvider>
               <BranchManagementProvider>
                 <FieldManagementProvider>
-                  <div className="grid md:grid-cols-[260px_auto] ">
-                    <OwnerSideBar />
-                    <div className="max-h-screen min-h-screen overflow-auto p-4">
-                      <OwnerNav />
-                      <div className="py-4">
-                        <UnAuthProvider>{children}</UnAuthProvider>
-                      </div>
-                      <Toaster />
-                    </div>
-                  </div>
+                  <FieldBookedQueueManagementProvider>
+                    <TournamentManagementProvider>
+                      <PrizeManagementProvider>
+                        <div className="grid md:grid-cols-[260px_auto] ">
+                          <OwnerSideBar />
+                          <div className="max-h-screen min-h-screen overflow-auto p-4">
+                            <OwnerNav />
+                            <div className="relative py-4">
+                              <UnAuthProvider>{children}</UnAuthProvider>
+                            </div>
+                            <Toaster />
+                          </div>
+                        </div>
+                      </PrizeManagementProvider>
+                    </TournamentManagementProvider>
+                  </FieldBookedQueueManagementProvider>
                 </FieldManagementProvider>
               </BranchManagementProvider>
             </AuthModalProvider>

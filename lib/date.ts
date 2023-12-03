@@ -1,3 +1,6 @@
+import { format } from "date-fns"
+import viVN from "date-fns/locale/vi"
+
 export const monthByNumber = {
   0: "January",
   1: "February",
@@ -45,4 +48,12 @@ export const nearlyYears = (): number[] => {
     years.push(i)
   }
   return years
+}
+
+export const convertDateAndTimeToDateTime = (date: Date, time: number): Date => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time, 0, 0)
+}
+
+export const formatVietnameseDate = (date: Date, formatter: string): string => {
+  return format(date, formatter, { locale: viVN })
 }

@@ -41,6 +41,7 @@ const useBranchStore = create<BranchStore>((set, get) => ({
     const res = await getBranchById(id)
     if (res.success) {
       set({ branch: res.data })
+      return res.data
     } else {
       set({ branch: null })
       throw res.message

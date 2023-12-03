@@ -1,5 +1,5 @@
-import Dashboard from "@/components/quan-ly-san-bong/dashboard"
 import React from "react"
+import Dashboard from "./_components/dashboard"
 
 const page = () => {
   return <Dashboard />

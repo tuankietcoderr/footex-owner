@@ -20,6 +20,7 @@ const useOwnerStore = create<OwnerStore>((set) => ({
     if (owner.success) {
       set({ owner: owner.data })
       localStorage.setItem(COMMON.ACCESS_TOKEN, owner.accessToken)
+      document.cookie = `${COMMON.ACCESS_TOKEN}=${owner.accessToken}; path=/;`
       return owner.data
     } else {
       set({ owner: null })

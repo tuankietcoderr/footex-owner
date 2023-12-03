@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils"
 import useBranchStore from "@/store/useBranchStore"
 import { Skeleton } from "../ui/skeleton"
 import { useAuthModalContext } from "@/context/AuthModalContext"
+import useOwnerStore from "@/store/useOwnerStore"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -27,6 +28,7 @@ interface TeamSwitcherProps extends PopoverTriggerProps {}
 
 export default function BranchSwitcher({ className }: TeamSwitcherProps) {
   const { branches, branch, setBranch } = useBranchStore()
+  const { owner } = useOwnerStore()
   const { openModal } = useBranchManagementContext()
   const { mustAuthorize } = useAuthModalContext()
   const [open, setOpen] = React.useState(false)
@@ -49,7 +51,7 @@ export default function BranchSwitcher({ className }: TeamSwitcherProps) {
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
-      {branches === undefined ? (
+      {branch === undefined && owner === undefined ? (
         <Skeleton className="w-[200px]" />
       ) : (
         <PopoverTrigger asChild>

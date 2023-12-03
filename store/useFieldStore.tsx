@@ -1,5 +1,5 @@
-import IField from "@/interface/IField"
-import { createField, getFieldsOfOrganization } from "@/services/field"
+import IField, { EFieldStatus } from "@/interface/IField"
+import { createField, getFieldsOfBranch, updateField, updateFieldStatus } from "@/services/field"
 import { create } from "zustand"
 
 interface IFieldStore {
@@ -8,7 +8,9 @@ interface IFieldStore {
   field: IField | undefined | null
   setField: (field: IField) => void
   addField: (field: IField) => Promise<IField>
-  getFieldsOfOrg: (orgId: string) => Promise<IField[]>
+  updateField: (field_id: string, field: IField) => Promise<IField>
+  updateFieldStatus: (field_id: string, status: EFieldStatus) => Promise<IField>
+  getFieldsOfBranch: (branchId: string) => Promise<IField[]>
   reset: (type: "all" | "single" | "multiple") => void
 }
 
@@ -26,9 +28,41 @@ const useFieldStore = create<IFieldStore>((set, get) => ({
       return Promise.reject(res.message)
     }
   },
-  getFieldsOfOrg: async (orgId) => {
+  updateField: async (field_id, field) => {
+    const res = await updateField(field_id, field)
+    if (res.success) {
+      const fields = get().fields?.map((f) => {
+        if (f._id === field_id) {
+          return res.data
+        } else {
+          return f
+        }
+      })
+      set({ field: res.data, fields })
+      return res.data
+    } else {
+      return Promise.reject(res.message)
+    }
+  },
+  updateFieldStatus: async (field_id, status) => {
+    const res = await updateFieldStatus(field_id, status)
+    if (res.success) {
+      const fields = get().fields?.map((f) => {
+        if (f._id === field_id) {
+          return res.data
+        } else {
+          return f
+        }
+      })
+      set({ field: res.data, fields })
+      return res.data
+    } else {
+      return Promise.reject(res.message)
+    }
+  },
+  getFieldsOfBranch: async (branchId) => {
     set({ fields: undefined })
-    const res = await getFieldsOfOrganization(orgId)
+    const res = await getFieldsOfBranch(branchId)
     if (res.success) {
       set({ fields: res.data.reverse() })
       return res.data

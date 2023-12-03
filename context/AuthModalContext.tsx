@@ -4,8 +4,12 @@ import useOwnerStore from "@/store/useOwnerStore"
 import { redirect, usePathname } from "next/navigation"
 import { PropsWithChildren, createContext, useContext, useState } from "react"
 import dynamic from "next/dynamic"
+import LoadingOverlay from "@/components/loading-overlay"
 
-const NotOwner = dynamic(() => import("@/components/modal/not-owner"), { ssr: false })
+const NotOwner = dynamic(() => import("@/components/modal/not-owner"), {
+  ssr: false,
+  loading: () => <LoadingOverlay />,
+})
 interface IAuthModalContext {
   visible: boolean
   openModal: () => boolean
@@ -59,7 +63,7 @@ export const AuthModalProvider = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
-      <NotOwner isOpen={visible} onClose={closeModal} />
+      {visible && <NotOwner isOpen={visible} onClose={closeModal} />}
     </AuthModalContext.Provider>
   )
 }

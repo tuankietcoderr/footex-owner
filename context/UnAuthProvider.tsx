@@ -1,10 +1,19 @@
 "use client"
-import UnAuthorized from "@/components/un-authorized"
-import UnBranch from "@/components/un-branch"
 import useBranchStore from "@/store/useBranchStore"
 import useOwnerStore from "@/store/useOwnerStore"
 import { usePathname } from "next/navigation"
 import { PropsWithChildren } from "react"
+import dynamic from "next/dynamic"
+import LoadingOverlay from "@/components/loading-overlay"
+
+const UnAuthorized = dynamic(() => import("@/components/un-authorized"), {
+  ssr: false,
+  loading: () => <LoadingOverlay />,
+})
+const UnBranch = dynamic(() => import("@/components/un-branch"), {
+  ssr: false,
+  loading: () => <LoadingOverlay />,
+})
 
 export default function UnAuthProvider({ children }: PropsWithChildren) {
   const { owner } = useOwnerStore()
@@ -14,7 +23,7 @@ export default function UnAuthProvider({ children }: PropsWithChildren) {
     return <UnAuthorized />
   }
 
-  if (owner && branches && branches?.length === 0) {
+  if (owner && branches && branches.length === 0) {
     return <UnBranch />
   }
   return children

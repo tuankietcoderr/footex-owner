@@ -9,11 +9,12 @@ const API_ROUTE = {
     INDEX: "/field",
     ID: "/field/:id",
     BRANCH: "/field/branch/:id",
+    STATUS: "/field/:id/status",
   },
   FIELD_BOOKED_QUEUE: {
     INDEX: "/field-booked-queue",
     ID: "/field-booked-queue/:id",
-    STATUS: "/field-booked-queue/status/:id",
+    STATUS: "/field-booked-queue/:id/status",
     FIELD: "/field-booked-queue/field/:id",
     GUEST: "/field-booked-queue/guest/:id",
   },
@@ -24,6 +25,7 @@ const API_ROUTE = {
     VERIFY_EMAIL: "/guest/verify-email",
     SEND_VERIFY_EMAIL: "/guest/send-verify-email",
     FORGOT_PASSWORD: "/guest/forgot-password",
+    PHONE_NUMBER: "/guest/phone-number/:phone",
   },
   OWNER: {
     INDEX: "/owner",
@@ -54,6 +56,7 @@ const API_ROUTE = {
     GUEST_JOINT: "/tournament/joint",
     TEAM: "/tournament/team/:id",
     JOIN: "/tournament/:id/join",
+    BRANCH: "/tournament/branch/:id",
   },
   MATCH: {
     INDEX: "/match",
@@ -72,6 +75,8 @@ const API_ROUTE = {
   },
   PRIZE: {
     INDEX: "/prize",
+    ID: "/prize/:id",
+    BRANCH: "/prize/branch/:id",
   },
   RATE: {
     INDEX: "/rate",

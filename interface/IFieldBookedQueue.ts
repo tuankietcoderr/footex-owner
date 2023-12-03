@@ -2,15 +2,16 @@ import IField from "./IField"
 import IGuest from "./IGuest"
 
 export enum EFieldBookedQueueStatus {
-  PENDING = "PENDING",
-  CANCELLED = "CANCELLED",
-  ACCEPTED = "ACCEPTED",
+  PENDING = "pending",
+  APPROVED = "approved",
+  DECLINED = "declined",
 }
+
 export default interface IFieldBookedQueue {
   _id?: string
-  bookedAt: Date
   bookedBy: string | IGuest
-  usageTimeCount: number
-  status: EFieldBookedQueueStatus
-  field: string | IField
+  startAt: Date
+  endAt: Date
+  status?: EFieldBookedQueueStatus
+  field?: string | IField
 }

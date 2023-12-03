@@ -1,8 +1,8 @@
-import Dashboard from "@/components/chu-san-bong/dashboard"
-import React from "react"
+import ROUTE from "@/constants/route"
+import { redirect } from "next/navigation"
 
 const page = () => {
-  return <Dashboard />
+  redirect(ROUTE.DASHBOARD)
 }
 
 export default page
