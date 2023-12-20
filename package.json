@@ -52,6 +52,7 @@
     "react-day-picker": "^8.9.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.46.1",
+    "react-hot-toast": "^2.4.1",
     "react-paginate": "^8.2.0",
     "recharts": "^2.8.0",
     "swiper": "^10.3.1",

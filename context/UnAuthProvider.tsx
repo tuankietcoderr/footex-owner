@@ -17,13 +17,14 @@ const UnBranch = dynamic(() => import("@/components/un-branch"), {
 
 export default function UnAuthProvider({ children }: PropsWithChildren) {
   const { owner } = useOwnerStore()
-  const { branches } = useBranchStore()
+  const { branch, branches } = useBranchStore()
+  console.log({ branches })
   const pathname = usePathname()
   if (owner === null && pathname !== "/dang-nhap" && pathname !== "/dang-ky") {
     return <UnAuthorized />
   }
 
-  if (owner && branches && branches.length === 0) {
+  if ((owner && branches && branches.length === 0) || (owner && !branch)) {
     return <UnBranch />
   }
   return children

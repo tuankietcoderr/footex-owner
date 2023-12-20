@@ -48,7 +48,7 @@ const page = async ({ params: { field_id } }: Props) => {
         </div>
         <div className="rounded-md border border-border p-4 shadow-md">
           <h4 className="font-bold">Mô tả</h4>
-          <p>{description}</p>
+          <p className="whitespace-pre-wrap">{description}</p>
         </div>
         <AllBookedGuests field_id={field_id} />
       </div>

@@ -237,11 +237,16 @@ const CreateTournamentModal = ({ onClose, visible = false }: CreateTournamentMod
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {prizes?.map((prize) => (
-                          <SelectItem value={prize?._id || ""} key={prize?._id}>
-                            {prize.name}
-                          </SelectItem>
-                        ))}
+                        {prizes &&
+                          (prizes.length > 0 ? (
+                            prizes?.map((prize) => (
+                              <SelectItem value={prize?._id || ""} key={prize?._id}>
+                                {prize.name}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <p className="text-xs text-muted">Không có gì</p>
+                          ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

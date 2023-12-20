@@ -9,6 +9,7 @@ import { useFieldBookedQueueManagementContext } from "@/context/FieldBookedQueue
 import { colorizeFieldBookedQueueStatus, colorizeTournamentStatus } from "@/utils/status"
 import IFieldBookedQueue, { EFieldBookedQueueStatus } from "@/interface/IFieldBookedQueue"
 import BookedItem from "./booked-item"
+import toast from "react-hot-toast"
 
 const AllBookedGuests = ({ field_id }: { field_id: string }) => {
   const { fieldBookedQueues, getFieldBookedQueuesOfField } = useFieldBookedQueueStore()
@@ -27,6 +28,26 @@ const AllBookedGuests = ({ field_id }: { field_id: string }) => {
     })) as Event[])
 
   const onSelectedSlot = (info: SlotInfo) => {
+    const { start, end } = info
+    if (start < new Date()) return toast.error("Không thể đặt sân vào quá khứ")
+    const startHour = start.getHours()
+    const endHour = end.getHours()
+    if (endHour - startHour > 3) {
+      return toast.error("Bạn chỉ có thể đặt sân tối đa 3 tiếng")
+    }
+    const existingEvents =
+      events?.filter((e) => {
+        const _start = (e.start || new Date()).getTime()
+        const _end = (e.end || new Date()).getTime()
+        const slotStart = start.getTime()
+        const slotEnd = end.getTime()
+        return (
+          (_start >= slotStart && _start < slotEnd) ||
+          (_end > slotStart && _end <= slotEnd) ||
+          (_start <= slotStart && _end >= slotEnd)
+        )
+      }) ?? []
+    if (existingEvents.length > 0) return toast.error("Khung giờ này đã có người đặt")
     openCreateModal({
       bookedBy: "",
       startAt: info.start,
