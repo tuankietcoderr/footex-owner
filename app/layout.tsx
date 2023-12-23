@@ -1,19 +1,8 @@
-import "./globals.css"
 import type { Metadata } from "next"
-import { Inter, Lexend } from "next/font/google"
+import { Lexend } from "next/font/google"
 import React from "react"
-import OwnerNav from "@/components/nav/owner-nav"
-import { ThemeProvider } from "@/components/theme-provider"
-import { AuthModalProvider } from "@/context/AuthModalContext"
-import AuthProvider from "./provider"
-import { Toaster } from "@/components/ui/toaster"
-import UnAuthProvider from "@/context/UnAuthProvider"
-import { BranchManagementProvider } from "@/context/BranchManagementContext"
-import { FieldManagementProvider } from "@/context/FieldManagementContext"
-import { TournamentManagementProvider } from "@/context/TournamentManagementContext"
-import { PrizeManagementProvider } from "@/context/PrizeManagementContext"
-import OwnerSideBar from "./dashboard/_components/sidebar"
-import { FieldBookedQueueManagementProvider } from "@/context/FieldBookedQueueManagementContext"
+import { Toaster } from "react-hot-toast"
+import "./globals.css"
 
 const inter = Lexend({ subsets: ["latin", "vietnamese"] })
 
@@ -26,37 +15,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${inter.className} bg-background`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <AuthModalProvider>
-              <BranchManagementProvider>
-                <FieldManagementProvider>
-                  <FieldBookedQueueManagementProvider>
-                    <TournamentManagementProvider>
-                      <PrizeManagementProvider>
-                        <div className="grid md:grid-cols-[260px_auto] ">
-                          <OwnerSideBar />
-                          <div className="max-h-screen min-h-screen overflow-auto p-4">
-                            <OwnerNav />
-                            <div className="relative py-4">
-                              <UnAuthProvider>{children}</UnAuthProvider>
-                            </div>
-                            <Toaster />
-                          </div>
-                        </div>
-                      </PrizeManagementProvider>
-                    </TournamentManagementProvider>
-                  </FieldBookedQueueManagementProvider>
-                </FieldManagementProvider>
-              </BranchManagementProvider>
-            </AuthModalProvider>
-          </AuthProvider>
-        </ThemeProvider>
+        <div>{children}</div>
+        <Toaster
+          toastOptions={{
+            duration: 3000,
+            position: "bottom-center",
+          }}
+        />
       </body>
     </html>
   )

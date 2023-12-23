@@ -9,7 +9,7 @@ export enum EFieldBookedQueueStatus {
 
 export default interface IFieldBookedQueue {
   _id?: string
-  bookedBy: string | IGuest
+  bookedBy?: string | IGuest
   startAt: Date
   endAt: Date
   status?: EFieldBookedQueueStatus

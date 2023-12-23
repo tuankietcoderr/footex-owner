@@ -1,4 +1,5 @@
 "use client"
+import { registerOwner } from "@/actions/auth-actions"
 import Address from "@/components/address"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,17 +11,24 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useToast } from "@/components/ui/use-toast"
-import IOwner from "@/interface/IOwner"
-import useUserStore from "@/store/useOwnerStore"
+import ROUTE from "@/constants/route"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import * as z from "zod"
 
 const formSchema = z
   .object({
+    email: z.string().email({
+      message: "Email không hợp lệ",
+    }),
+    phoneNumber: z
+      .string()
+      .refine(
+        (data) => new RegExp(/^(0[1-9])+([0-9]{8})\b/).test(data),
+        "Số điện thoại không hợp lệ"
+      ),
     password: z
       .string()
       .min(6, {
@@ -36,8 +44,6 @@ const formSchema = z
       ),
     confirm: z.string(),
     name: z.string().min(2, { message: "Tên phải có ít nhất 2 ký tự" }),
-    email: z.string().email({ message: "Email không hợp lệ" }),
-    phoneNumber: z.string(),
     city: z.string().nonempty({ message: "Tỉnh/thành phố không được để trống" }),
     district: z.string().nonempty({ message: "Quận/huyện không được để trống" }),
     ward: z.string().nonempty({ message: "Phường/xã không được để trống" }),
@@ -53,45 +59,32 @@ const Page = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      email: "",
+      phoneNumber: "",
       password: "",
       name: "",
       confirm: "",
-      city: "",
-      district: "",
-      ward: "",
-      street: "",
-      houseNumber: "",
-      phoneNumber: "",
-      email: "",
     },
   })
-  const { registerOwner } = useUserStore()
-  const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const processedData: IOwner = data
-    setLoading(true)
-    registerOwner(processedData)
-      .then(() => {
-        toast({
-          title: "Đăng ký thành công",
-          description: "Chào mừng bạn đến với Footex",
-        })
-      })
-      .catch((err) => {
-        toast({
-          title: "Đăng ký thất bại",
-          description: err,
-        })
-      })
-      .finally(() => setLoading(false))
+    toast.loading("Đang đăng ký...", {
+      duration: Infinity,
+    })
+    const { success, message } = await registerOwner(data)
+    toast.dismiss()
+    if (success) {
+      toast.success(message)
+    } else {
+      toast.error(message)
+    }
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-fit w-[400px] space-y-4 rounded-lg border border-border p-6 shadow-lg"
+        className="h-fit w-[400px] space-y-4 rounded-lg p-6 shadow-lg"
       >
         <h1 className="text-center text-2xl font-semibold">Đăng ký</h1>
         <FormField
@@ -114,7 +107,7 @@ const Page = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="footexuser@footex.com" {...field} />
+                <Input placeholder="footex@footex.com" type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -133,9 +126,7 @@ const Page = () => {
             </FormItem>
           )}
         />
-
-        <Address />
-
+        <Address showStreet showHouseNumber />
         <FormField
           control={form.control}
           name="password"
@@ -162,16 +153,12 @@ const Page = () => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={loading}
-          onClick={() => console.log(form.getValues())}
-        >
-          {!loading ? "Đăng ký" : "Đang đăng ký..."}
+
+        <Button type="submit" className="w-full">
+          Đăng ký
         </Button>
-        <Button className="w-full" asChild variant={"outline"}>
-          <Link href="/dang-nhap">Đăng nhập</Link>
+        <Button variant="outline" type="button" className="w-full" asChild>
+          <Link href={ROUTE.AUTH.SIGN_IN}>Đăng nhập</Link>
         </Button>
       </form>
     </Form>

@@ -1,10 +1,17 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import { fetchAddress, fetchAddressDetail } from "./api"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { useFormContext } from "react-hook-form"
 import IOwner from "@/interface/IOwner"
+import { Input } from "../ui/input"
 
 type TAddress = {
   name: string
@@ -21,7 +28,13 @@ type TDistrict = TAddress & {
 
 type TWard = TAddress
 
-const Address = () => {
+type Props = {
+  showStreet?: boolean
+  showHouseNumber?: boolean
+}
+
+const Address = ({ showHouseNumber = false, showStreet = false }: Props) => {
+  const form = useFormContext<IOwner>()
   const [city, setCity] = useState<TProvince[]>([])
   const [cityLoading, setCityLoading] = useState(false)
 
@@ -30,9 +43,6 @@ const Address = () => {
 
   const [ward, setWard] = useState<TWard[]>([])
   const [wardLoading, setWardLoading] = useState(false)
-
-  const [street, setStreet] = useState("")
-  const [houseNumber, setHouseNumber] = useState("")
 
   const onPressFetchCity = async () => {
     if (city.length === 0) {
@@ -76,8 +86,6 @@ const Address = () => {
     }
   }
 
-  const form = useFormContext<IOwner>()
-
   return (
     <>
       <FormField
@@ -95,13 +103,14 @@ const Address = () => {
                 onPressFetchDistrict(v)
                 setWard([])
               }}
+              defaultValue={field.value}
             >
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn tỉnh/thành phố" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[200px] overflow-auto">
+              <SelectContent className="max-h-[300px] overflow-auto" defaultValue={field.value}>
                 {city.length > 0 &&
                   city.map((item: any) => (
                     <SelectItem value={item.name} key={item.codename}>
@@ -128,13 +137,14 @@ const Address = () => {
                   field.onChange(v)
                   onPressFetchWard(v)
                 }}
+                defaultValue={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Chọn quận/huyện" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="max-h-[200px] overflow-auto">
+                <SelectContent className="max-h-[300px] overflow-auto" defaultValue={field.value}>
                   {district.length > 0 &&
                     district.map((item: any) => (
                       <SelectItem value={item.name} key={item.codename}>
@@ -156,13 +166,13 @@ const Address = () => {
           name="ward"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange}>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Chọn phường/xã" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent className="max-h-[200px] overflow-auto">
+                <SelectContent className="max-h-[300px] overflow-auto" defaultValue={field.value}>
                   {ward.length > 0 &&
                     ward.map((item: any) => (
                       <SelectItem value={item.name} key={item.codename}>
@@ -172,6 +182,36 @@ const Address = () => {
                   {wardLoading && <p className="text-center text-xs">Đang tải...</p>}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+      {ward.length > 0 && showStreet && (
+        <FormField
+          control={form.control}
+          name="street"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Đường</FormLabel>
+              <FormControl>
+                <Input placeholder="Đường 1" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+      {ward.length > 0 && showHouseNumber && (
+        <FormField
+          control={form.control}
+          name="houseNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Số nhà</FormLabel>
+              <FormControl>
+                <Input placeholder="F30/15" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
