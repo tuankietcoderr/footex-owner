@@ -3,6 +3,7 @@
 import FETCH, { FETCH_WITH_TOKEN } from "@/api/fetch"
 import API_ROUTE from "@/constants/api-route"
 import CACHE_TAGS from "@/constants/cache-tags"
+import IPrize from "@/interface/IPrize"
 import ITournament, { ETournamentStatus } from "@/interface/ITournament"
 import { revalidateTag } from "next/cache"
 

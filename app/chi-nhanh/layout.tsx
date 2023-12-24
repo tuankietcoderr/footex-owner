@@ -1,12 +1,13 @@
-import { getStatus } from "@/actions/auth-actions"
+import { getStatus, logoutOwner } from "@/actions/auth-actions"
 import { Button } from "@/components/ui/button"
 import ROUTE from "@/constants/route"
 import { EOwnerStatus } from "@/interface/IOwner"
-import { getSession } from "@/services/auth/cookie-session"
+import { deleteSession, getSession } from "@/services/auth/cookie-session"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { PropsWithChildren } from "react"
 import Base from "./_components/base"
+import Error from "@/illustrations/error"
 
 const layout = async ({ children }: PropsWithChildren) => {
   const { isLogin } = await getSession()
@@ -15,7 +16,11 @@ const layout = async ({ children }: PropsWithChildren) => {
   }
   const { success, message, data } = await getStatus()
   if (!success) {
-    redirect(ROUTE.INDEX)
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Error fill="var(--primary)" className="fill-primary" />
+      </div>
+    )
   }
 
   const status = data?.status as EOwnerStatus
