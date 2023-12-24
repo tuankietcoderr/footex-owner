@@ -1,4 +1,5 @@
 "use client"
+import { deleteTournament } from "@/actions/tournament-actions"
 import UpdateTournamentModal from "@/components/modal/update-tournament-info-modal"
 import Table from "@/components/table"
 import { ColumnProps } from "@/components/table/table"
@@ -19,6 +20,7 @@ import { vilizeTournamentStatus } from "@/utils/status"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import React, { useCallback, useEffect } from "react"
+import toast from "react-hot-toast"
 
 type Props = {
   tournaments: ITournament[]
@@ -82,7 +84,11 @@ const AllTournaments = ({ tournaments }: Props) => {
             />
           )}
           {row.status === ETournamentStatus.UPCOMING && (
-            <Button variant={"ghost"} className="text-destructive">
+            <Button
+              variant={"ghost"}
+              className="text-destructive"
+              onClick={() => onDeleteTournament(row._id!)}
+            >
               Xóa
             </Button>
           )}
@@ -90,6 +96,19 @@ const AllTournaments = ({ tournaments }: Props) => {
       ),
     },
   ]
+
+  async function onDeleteTournament(id: string) {
+    toast.loading("Đang xóa giải đấu...", {
+      duration: Infinity,
+    })
+    const { success, message } = await deleteTournament(id)
+    toast.dismiss()
+    if (success) {
+      toast.success(message)
+    } else {
+      toast.error(message)
+    }
+  }
 
   const { id } = useParams<{
     id: string

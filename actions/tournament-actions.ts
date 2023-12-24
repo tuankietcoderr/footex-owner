@@ -63,10 +63,22 @@ const updateTournamentStatus = async (id: string, status: ETournamentStatus) => 
   return res
 }
 
+const deleteTournament = async (id: string) => {
+  const res = await FETCH_WITH_TOKEN<ITournament>(API_ROUTE.TOURNAMENT.ID.replace(":id", id), {
+    method: "DELETE",
+  })
+  if (res.success) {
+    revalidateTag(CACHE_TAGS.TOURNAMENT.GET_BY_ID)
+    revalidateTag(CACHE_TAGS.TOURNAMENT.GET_BRANCH_TOURNAMENTS)
+  }
+  return res
+}
+
 export {
   getBranchTournaments,
   createTournament,
   getTournamentById,
   updateTournamentInfo,
   updateTournamentStatus,
+  deleteTournament,
 }
