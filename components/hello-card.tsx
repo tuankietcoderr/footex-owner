@@ -9,7 +9,7 @@ type Props = {
 
 const HelloCard = ({ title, footer, content }: Props) => {
   return (
-    <Card className="relative flex h-full flex-col justify-between overflow-hidden">
+    <Card className="relative flex h-full flex-col justify-between overflow-hidden rounded-lg">
       <CardHeader className="text-2xl">
         <CardTitle>{title}</CardTitle>
       </CardHeader>

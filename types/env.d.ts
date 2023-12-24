@@ -4,6 +4,7 @@ declare global {
     interface ProcessEnv {
       NEXT_PUBLIC_DEV_API: string
       NEXT_PUBLIC_PROD_API: string
+      SESSION_PASSWORD: string
     }
   }
 }

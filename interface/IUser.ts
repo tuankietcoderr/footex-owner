@@ -1,14 +1,11 @@
-export default interface IUser {
+import IAddress from "./IAddress"
+
+export default interface IUser extends IAddress {
   _id?: string
   password?: string
   name: string
-  email: string
+  email?: string
   avatar?: string
   phoneNumber: string
   isEmailVerified?: boolean
-  houseNumber: string
-  street: string
-  ward: string
-  district: string
-  city: string
 }

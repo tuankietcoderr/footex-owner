@@ -1,4 +1,7 @@
 export const COMMON = {
   ACCESS_TOKEN: "FOOTEX_ACCESS_TOKEN",
   LAST_ORG_ID: "FOOTEX_LAST_ORG_ID",
+  AUTH_SESSION: "FOOTEX_AUTH_SESSION_OWNER",
+  REDIRECT: "redirect",
+  CREATE_GUEST_FALLBACK: "create-guest-fallback",
 }

@@ -1,27 +1,25 @@
-import { Star } from "lucide-react"
-import React from "react"
+"use client"
+import { Rating } from "react-custom-rating-component"
 
-type RatingStarProps = {
-  rating: number
-  total?: number
-  size?: number
+interface RatingProps {
+  precision?: 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1
+  count?: number
+  shape?: "star" | "heart"
+  activeColor?: string
+  defaultColor?: string
+  defaultValue: number
+  readOnly?: boolean
+  classNames?: string
+  size?: string
+  spacing?: string
+  titleArray?: string[]
+  showTitle?: boolean
+  onChange?: (newRating: number) => void
+  onHover?: (hoveredRating: number) => void
 }
 
-const RatingStar = ({ rating, total = 5, size }: RatingStarProps) => {
-  const staticStar = Array.from({ length: total }, (_, index) => index + 1)
-  return (
-    <div className="flex -translate-x-1 items-center gap-1">
-      {staticStar.map((star, index) => (
-        <Star
-          key={index}
-          fill={index < rating ? "yellow" : "lightgray"}
-          className="stroke-none"
-          strokeWidth={1}
-          size={size || 24}
-        />
-      ))}
-    </div>
-  )
+const RatingStar = (props: RatingProps) => {
+  return <Rating {...props} />
 }
 
 export default RatingStar

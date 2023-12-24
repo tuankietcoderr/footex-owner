@@ -1,10 +1,11 @@
 import IOwner from "./IOwner"
 
 export enum EBranchStatus {
-  PENDING = "PENDING",
-  ACTIVE = "ACTIVE",
-  REJECTED = "REJECTED",
-  MAINTAINING = "MAINTAINING",
+  ACTIVE = "active",
+  MAINTAINING = "maintaining",
+  REJECTED = "rejected",
+  BLOCKED = "blocked",
+  DELETED = "deleted",
 }
 
 export default interface IBranch {

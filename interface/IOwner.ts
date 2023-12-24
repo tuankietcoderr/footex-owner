@@ -1,6 +1,6 @@
 import IUser from "./IUser"
 
-enum EOwnerStatus {
+export enum EOwnerStatus {
   PENDING = "pending",
   ACTIVE = "active",
   BLOCKED = "blocked",

@@ -7,5 +7,5 @@ enum EGuestStatus {
 }
 
 export default interface IGuest extends IUser {
-  status: EGuestStatus
+  status?: EGuestStatus
 }

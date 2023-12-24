@@ -17,7 +17,7 @@ export default interface ITournament {
   endAt: Date
   branch?: string | IBranch
   teams?: string[] | ITeam[]
-  timelines?: string[] | IMatch[]
+  matches?: string[] | IMatch[]
   prize?: string | IPrize<ITeam>
   status?: ETournamentStatus
 }

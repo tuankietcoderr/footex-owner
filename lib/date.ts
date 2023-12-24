@@ -55,5 +55,5 @@ export const convertDateAndTimeToDateTime = (date: Date, time: number): Date => 
 }
 
 export const formatVietnameseDate = (date: Date, formatter: string): string => {
-  return format(date, formatter, { locale: viVN })
+  return format(new Date(date), formatter, { locale: viVN })
 }

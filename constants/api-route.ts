@@ -1,4 +1,8 @@
 const API_ROUTE = {
+  BASE_URL:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:2003/api"
+      : "https://footex.up.railway.app/api",
   BRANCH: {
     INDEX: "/branch",
     ID: "/branch/:id",
@@ -26,6 +30,8 @@ const API_ROUTE = {
     SEND_VERIFY_EMAIL: "/guest/send-verify-email",
     FORGOT_PASSWORD: "/guest/forgot-password",
     PHONE_NUMBER: "/guest/phone-number/:phone",
+    SEARCH_BY_EMAIL_OR_PHONE_NUMBER: "/guest/search/:emailOrPhoneNumber",
+    ID: "/guest/:id",
   },
   OWNER: {
     INDEX: "/owner",
@@ -34,6 +40,7 @@ const API_ROUTE = {
     VERIFY_EMAIL: "/owner/verify-email",
     SEND_VERIFY_EMAIL: "/owner/send-verify-email",
     FORGOT_PASSWORD: "/owner/forgot-password",
+    STATUS: "/owner/status",
   },
   TEAM: {
     INDEX: "/team",
@@ -53,6 +60,7 @@ const API_ROUTE = {
   TOURNAMENT: {
     INDEX: "/tournament",
     ID: "/tournament/:id",
+    STATUS: "/tournament/:id/status",
     GUEST_JOINT: "/tournament/joint",
     TEAM: "/tournament/team/:id",
     JOIN: "/tournament/:id/join",
@@ -60,6 +68,12 @@ const API_ROUTE = {
   },
   MATCH: {
     INDEX: "/match",
+    ID: "/match/:id",
+    GOAL: "/match/:id/goal",
+    GOAL_ID: "/match/:id/goal/:goalId",
+    CARD_FINE: "/match/:id/fine",
+    CARD_FINE_ID: "/match/:id/fine/:fineId",
+    CARD_FINE_ID_CARD: "/match/:id/fine/:fineId/card",
   },
   MATCH_RESULT: {
     INDEX: "/match-result",
@@ -70,9 +84,6 @@ const API_ROUTE = {
   GOAL_DETAIL: {
     INDEX: "/goal-detail",
   },
-  CARD_FINE: {
-    INDEX: "/card-fine",
-  },
   PRIZE: {
     INDEX: "/prize",
     ID: "/prize/:id",
@@ -80,6 +91,7 @@ const API_ROUTE = {
   },
   RATE: {
     INDEX: "/rate",
+    OBJECT: "/rate/:objectType/:objectId",
   },
 }
 
