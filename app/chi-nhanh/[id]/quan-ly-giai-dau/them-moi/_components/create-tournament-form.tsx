@@ -324,10 +324,10 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
             </form>
           </Form>
         )}
+        {prizeVisible && (
+          <CreatePrizeModal visible={prizeVisible} onClose={() => setPrizeVisible(false)} />
+        )}
       </div>
-      {prizeVisible && (
-        <CreatePrizeModal visible={prizeVisible} onOpenChange={(v) => setPrizeVisible(v)} />
-      )}
     </>
   )
 }

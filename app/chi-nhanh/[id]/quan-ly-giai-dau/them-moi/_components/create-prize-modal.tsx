@@ -1,7 +1,16 @@
 "use client"
-import { createPrize } from "@/actions/prize-actions"
+import { zodResolver } from "@hookform/resolvers/zod"
+import React from "react"
+import { useForm } from "react-hook-form"
+import { ZodAny, ZodRawShape, z } from "zod"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -13,11 +22,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import IPrize from "@/interface/IPrize"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { createPrize } from "@/actions/prize-actions"
 import toast from "react-hot-toast"
-import { z } from "zod"
 
 const formSchema = z.object({
   name: z
@@ -40,11 +47,11 @@ const formSchema = z.object({
 })
 
 type CreatePrizeModalProps = {
-  onOpenChange: (v: boolean) => void
+  onClose: () => void
   visible: boolean
 }
 
-const CreatePrizeModal = ({ onOpenChange, visible = false }: CreatePrizeModalProps) => {
+const CreatePrizeModal = ({ onClose, visible = false }: CreatePrizeModalProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +61,11 @@ const CreatePrizeModal = ({ onOpenChange, visible = false }: CreatePrizeModalPro
       value: 10000,
     },
   })
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose()
+    }
+  }
 
   const { id } = useParams<{
     id: string
@@ -72,7 +84,7 @@ const CreatePrizeModal = ({ onOpenChange, visible = false }: CreatePrizeModalPro
     toast.dismiss()
     if (success) {
       toast.success(message)
-      // onClose()
+      onClose()
     } else {
       toast.error(message)
     }
