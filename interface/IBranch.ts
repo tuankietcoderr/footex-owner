@@ -2,8 +2,6 @@ import IOwner from "./IOwner"
 
 export enum EBranchStatus {
   ACTIVE = "active",
-  MAINTAINING = "maintaining",
-  REJECTED = "rejected",
   BLOCKED = "blocked",
   DELETED = "deleted",
 }

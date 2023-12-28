@@ -1,3 +1,4 @@
+import { EBranchStatus } from "@/interface/IBranch"
 import { ECard } from "@/interface/ICardFine"
 import { EFieldStatus } from "@/interface/IField"
 import { EFieldBookedQueueStatus } from "@/interface/IFieldBookedQueue"
@@ -113,6 +114,19 @@ const vilizeInvoiceStatus = (st: EInvoiceStatus) => {
   }
 }
 
+const generalizeBranchStatus = (st: EBranchStatus) => {
+  switch (st) {
+    case EBranchStatus.ACTIVE:
+      return "Đang hoạt động"
+    case EBranchStatus.BLOCKED:
+      return "Chi nhánh hiện đang bị khóa"
+    case EBranchStatus.DELETED:
+      return "Chi nhánh đã bị xóa"
+    default:
+      return "Không xác định"
+  }
+}
+
 export {
   colorizeFieldBookedQueueStatus,
   colorizeFieldStatus,
@@ -122,4 +136,5 @@ export {
   vilizeFieldStatus,
   vilizeTournamentStatus,
   vilizeInvoiceStatus,
+  generalizeBranchStatus,
 }
