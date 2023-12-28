@@ -27,6 +27,7 @@ const ROUTE = {
       INDEX: "/chi-nhanh/:branchId/cai-dat",
       ID: "/chi-nhanh/:branchId/cai-dat/:id",
     },
+    INVOICE: "/chi-nhanh/:branchId/hoa-don",
   },
   AUTH: {
     SIGN_IN: "/dang-nhap",

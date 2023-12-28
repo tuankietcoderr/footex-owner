@@ -4,28 +4,28 @@ import {
   updateFieldBookedQueueStatus,
 } from "@/actions/field-booked-queue-actions"
 import { Button } from "@/components/ui/button"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import IFieldBookedQueue, { EFieldBookedQueueStatus } from "@/interface/IFieldBookedQueue"
 import IGuest from "@/interface/IGuest"
-import React from "react"
+import { formatVietnameseDate } from "@/lib/date"
+import { vilizeFieldBookedQueueStatus } from "@/utils/status"
 import { Event } from "react-big-calendar"
 import toast from "react-hot-toast"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import AppAvatar from "../app-avatar"
-import { Separator } from "../ui/separator"
-import { formatVietnameseDate } from "@/lib/date"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { cn } from "@/lib/utils"
-import { colorizeFieldBookedQueueStatus, vilizeFieldBookedQueueStatus } from "@/utils/status"
+import { Separator } from "../ui/separator"
+import { createInvoice } from "@/actions/invoice-actions"
+import IField from "@/interface/IField"
 
 type Props = {
   event: Event
 }
 
 const BookedItem = ({ event: { title, resource } }: Props) => {
-  const { endAt, startAt, bookedBy, status, _id } = resource as IFieldBookedQueue
+  const { endAt, startAt, bookedBy, status, _id, field } = resource as IFieldBookedQueue
   const guest = (bookedBy ?? {}) as IGuest
   const statuses = Object.values(EFieldBookedQueueStatus)
+  const _field = (field ?? {}) as IField
   const onRemove = async () => {
     const id = resource?._id
     if (!id) return
@@ -47,6 +47,20 @@ const BookedItem = ({ event: { title, resource } }: Props) => {
     if (!success) {
       return toast.error(message)
     }
+    toast.success(message)
+  }
+
+  const handleCreateInvoice = async () => {
+    toast.loading("Đang tạo hóa đơn...", {
+      duration: Infinity,
+    })
+    const total = (new Date(endAt).getHours() - new Date(startAt).getHours()) * _field.price
+    const { success, message } = await createInvoice({
+      total,
+      fieldBooked: _id!,
+    })
+    toast.dismiss()
+    if (!success) return toast.error(message)
     toast.success(message)
   }
 
@@ -85,7 +99,10 @@ const BookedItem = ({ event: { title, resource } }: Props) => {
           </Select>
         </div>
         <Separator />
-        <div className="self-end">
+        <div className="space-x-2 self-end">
+          {status === EFieldBookedQueueStatus.APPROVED && (
+            <Button onClick={handleCreateInvoice}>Tạo hóa đơn</Button>
+          )}
           <Button variant={"destructive"} onClick={onRemove}>
             Xóa
           </Button>

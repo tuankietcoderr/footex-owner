@@ -93,6 +93,12 @@ const API_ROUTE = {
     INDEX: "/rate",
     OBJECT: "/rate/:objectType/:objectId",
   },
+  INVOICE: {
+    INDEX: "/invoice",
+    ID: "/invoice/:id",
+    STATUS: "/invoice/:id/status",
+    BRANCH: "/invoice/branch/:id",
+  },
 }
 
 export default API_ROUTE

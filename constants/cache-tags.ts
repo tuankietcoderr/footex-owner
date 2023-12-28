@@ -23,6 +23,9 @@ const CACHE_TAGS = {
   MATCH: {
     GET_BY_ID: "MATCH_GET_BY_ID",
   },
+  INVOICE: {
+    GET_INVOICE: "INVOICE_GET_INVOICE",
+  },
 }
 
 export default CACHE_TAGS

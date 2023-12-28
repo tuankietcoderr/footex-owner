@@ -1,6 +1,7 @@
 import { ECard } from "@/interface/ICardFine"
 import { EFieldStatus } from "@/interface/IField"
 import { EFieldBookedQueueStatus } from "@/interface/IFieldBookedQueue"
+import { EInvoiceStatus } from "@/interface/IInvoice"
 import { ETournamentStatus } from "@/interface/ITournament"
 
 const vilizeFieldStatus = (st: EFieldStatus) => {
@@ -99,6 +100,19 @@ const vilizeCardFine = (card: ECard) => {
   }
 }
 
+const vilizeInvoiceStatus = (st: EInvoiceStatus) => {
+  switch (st) {
+    case EInvoiceStatus.PENDING:
+      return "Đang chờ"
+    case EInvoiceStatus.PAID:
+      return "Đã thanh toán"
+    case EInvoiceStatus.CANCELLED:
+      return "Đã hủy"
+    default:
+      return "Không xác định"
+  }
+}
+
 export {
   colorizeFieldBookedQueueStatus,
   colorizeFieldStatus,
@@ -107,4 +121,5 @@ export {
   vilizeFieldBookedQueueStatus,
   vilizeFieldStatus,
   vilizeTournamentStatus,
+  vilizeInvoiceStatus,
 }

@@ -12,7 +12,7 @@ import Error from "@/illustrations/error"
 const layout = async ({ children }: PropsWithChildren) => {
   const { isLogin } = await getSession()
   if (!isLogin) {
-    redirect(ROUTE.INDEX)
+    return redirect(ROUTE.INDEX)
   }
   const { success, message, data } = await getStatus()
   if (!success) {

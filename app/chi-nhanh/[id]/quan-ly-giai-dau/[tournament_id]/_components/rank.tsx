@@ -12,8 +12,8 @@ type Props = {
   teams: ITeam[]
 }
 
-const TournamentJointTeams = ({ teams = [] }: Props) => {
-  const headers = ["Logo", "Tên đội", "Số lượng thành viên", "Giải đấu đã tham gia", "Hành động"]
+const RankBoard = ({ teams = [] }: Props) => {
+  const headers = ["Logo", "Tên đội", "Điểm"]
   const columns: ColumnProps<ITeam>[] = [
     {
       headRef: "Logo",
@@ -84,4 +84,4 @@ const TournamentJointTeams = ({ teams = [] }: Props) => {
   )
 }
 
-export default TournamentJointTeams
+export default RankBoard

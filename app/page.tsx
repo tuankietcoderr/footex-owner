@@ -8,8 +8,9 @@ const page = async () => {
   const { isLogin } = await getSession()
   if (!isLogin) {
     redirect(ROUTE.AUTH.SIGN_IN)
+  } else {
+    redirect(ROUTE.BRANCH.INDEX)
   }
-  redirect(ROUTE.BRANCH.INDEX)
 }
 
 export default page

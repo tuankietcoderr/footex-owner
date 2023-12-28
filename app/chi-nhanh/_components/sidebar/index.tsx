@@ -2,7 +2,7 @@
 import ROUTE from "@/constants/route"
 import Image from "next/image"
 import Link from "next/link"
-import { Dice6, Home, LogOut, Settings, Trophy } from "lucide-react"
+import { Dice6, Home, LogOut, Receipt, Settings, Trophy } from "lucide-react"
 import OwnerSidebarItem from "./sidebar-item"
 import { IOwnerSideBarNavItem } from "./sidebar.type"
 import { Button } from "@/components/ui/button"
@@ -28,6 +28,11 @@ const OwnerSideBar = ({ branchId }: Props) => {
       icon: Trophy,
       label: "Quản lý giải đấu",
       link: ROUTE.BRANCH.TOURNAMENT.INDEX.replace(":branchId", branchId),
+    },
+    {
+      icon: Receipt,
+      label: "Hóa đơn",
+      link: ROUTE.BRANCH.INVOICE.replace(":branchId", branchId),
     },
     {
       icon: Settings,

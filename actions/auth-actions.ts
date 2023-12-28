@@ -84,6 +84,16 @@ const getStatus = async () => {
   return res
 }
 
+const forgotPassword = async (email: string) => {
+  const res = await FETCH(API_ROUTE.OWNER.FORGOT_PASSWORD, {
+    method: "POST",
+    params: {
+      email,
+    },
+  })
+  return res
+}
+
 export {
   loginOwner,
   logoutOwner,
@@ -92,4 +102,5 @@ export {
   sendVerifyEmail,
   loadOwnerIfVerified,
   getStatus,
+  forgotPassword,
 }
