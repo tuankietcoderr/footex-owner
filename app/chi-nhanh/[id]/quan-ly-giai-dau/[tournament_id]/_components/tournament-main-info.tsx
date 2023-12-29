@@ -80,7 +80,7 @@ const TournamentMainInfo = (tournament: ITournament) => {
         </div>
         {status === ETournamentStatus.UPCOMING && (
           <UpdateTournamentModal
-            initialData={{ ...tournament }}
+            initialData={{ ...tournament, image: images?.[0] ?? "" }}
             tournamentId={tournament?._id!}
             trigger={<Button className="self-end">Cập nhật thông tin giải đấu</Button>}
           />

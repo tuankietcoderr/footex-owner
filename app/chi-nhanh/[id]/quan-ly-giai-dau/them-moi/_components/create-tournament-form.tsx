@@ -37,7 +37,13 @@ import IFieldBookedQueue, { EFieldBookedQueueStatus } from "@/interface/IFieldBo
 import toast from "react-hot-toast"
 import { createTournament } from "@/actions/tournament-actions"
 import IPrize from "@/interface/IPrize"
-import CreatePrizeModal from "./create-prize-modal"
+import dynamic from "next/dynamic"
+import LoadingOverlay from "@/components/loading-overlay"
+
+const CreatePrizeModal = dynamic(() => import("./create-prize-modal"), {
+  ssr: false,
+  loading: () => <LoadingOverlay />,
+})
 
 const formSchema = z
   .object({
@@ -59,6 +65,7 @@ const formSchema = z
       message: "Thời gian kết thúc không được nhỏ hơn hiện tại",
     }),
     prize: z.string(),
+    image: z.string().url("Đường dẫn ảnh không hợp lệ"),
   })
   .refine((v) => v.startAt < v.endAt, {
     message: "Thời gian bắt đầu không được lớn hơn thời gian kết thúc",
@@ -79,6 +86,7 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
       startAt: new Date(),
       endAt: new Date(),
       prize: "",
+      image: "",
     },
   })
 
@@ -151,10 +159,10 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
   }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log({ data })
     const sendData: ITournament = {
       ...data,
       branch: id,
+      images: [data.image],
     }
     // add tournament
     toast.loading("Đang tạo giải đấu...", {
@@ -172,6 +180,9 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
 
   return (
     <>
+      {prizeVisible && (
+        <CreatePrizeModal visible={prizeVisible} onClose={() => setPrizeVisible(false)} />
+      )}
       <div className="space-y-4">
         <div className="rounded-md border p-4 shadow-sm">
           <BigCalendar
@@ -190,142 +201,162 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
           />
         </div>
         {event && (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              ref={formRef}
-              className="flex flex-col space-y-4 rounded-md border p-4 shadow-sm"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tên giải đấu</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Giải đấu 1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Thông tin giải đấu</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Nhập thông tin giải đấu..."
-                        className="max-h-[300px] min-h-[100px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="startAt"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Ngày bắt đầu</FormLabel>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(!field.value && "text-muted-foreground")}
-                          type="button"
-                          disabled
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
-                        </Button>
-                      </FormControl>
-                    </div>
-                    <FormMessage className="text-right" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="endAt"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Ngày kết thúc</FormLabel>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(!field.value && "text-muted-foreground", "!m-0")}
-                          type="button"
-                          disabled
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
-                        </Button>
-                      </FormControl>
-                    </div>
-                    <FormMessage className="text-right" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="prize"
-                render={({ field }) => (
-                  <FormItem className="flex items-center justify-between">
-                    <FormLabel>Giải thưởng</FormLabel>
-                    <div className="self-end">
-                      <FormControl>
-                        <Select onValueChange={field.onChange}>
+          <Dialog
+            open={!!event}
+            onOpenChange={(v) => {
+              if (!v) setEvent(null)
+            }}
+          >
+            <DialogContent>
+              <DialogHeader>Tạo giải đấu</DialogHeader>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  ref={formRef}
+                  className="flex flex-col space-y-4 rounded-md border p-4 shadow-sm"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tên giải đấu</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Giải đấu 1" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hình ảnh giải đấu</FormLabel>
+                        <FormControl>
+                          <Input placeholder="https://example.com/footex.png" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Thông tin giải đấu</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Nhập thông tin giải đấu..."
+                            className="max-h-[300px] min-h-[100px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="startAt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center justify-between">
+                          <FormLabel>Ngày bắt đầu</FormLabel>
                           <FormControl>
-                            <SelectTrigger className="w-max">
-                              <SelectValue placeholder="Chọn giải thưởng cho giải đấu" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {prizes &&
-                              (prizes.length > 0 ? (
-                                prizes?.map((prize) => (
-                                  <SelectItem value={prize?._id || ""} key={prize?._id}>
-                                    {prize.name}
-                                  </SelectItem>
-                                ))
-                              ) : (
-                                //! TODO: add prize
-                                <div>
-                                  <p className="text-center text-sm text-muted-foreground">
-                                    Không có gì
-                                  </p>
-                                </div>
-                              ))}
                             <Button
-                              className="w-full"
-                              variant={"link"}
-                              onClick={() => setPrizeVisible(true)}
+                              variant={"outline"}
+                              className={cn(!field.value && "text-muted-foreground")}
+                              type="button"
+                              disabled
                             >
-                              Tạo giải thưởng
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
                             </Button>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
+                          </FormControl>
+                        </div>
+                        <FormMessage className="text-right" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="endAt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center justify-between">
+                          <FormLabel>Ngày kết thúc</FormLabel>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(!field.value && "text-muted-foreground", "!m-0")}
+                              type="button"
+                              disabled
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
+                            </Button>
+                          </FormControl>
+                        </div>
+                        <FormMessage className="text-right" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="prize"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center justify-between">
+                        <FormLabel>Giải thưởng</FormLabel>
+                        <div className="self-end">
+                          <FormControl>
+                            <Select onValueChange={field.onChange}>
+                              <FormControl>
+                                <SelectTrigger className="w-max">
+                                  <SelectValue placeholder="Chọn giải thưởng cho giải đấu" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {prizes &&
+                                  (prizes.length > 0 ? (
+                                    prizes?.map((prize) => (
+                                      <SelectItem value={prize?._id || ""} key={prize?._id}>
+                                        {prize.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    //! TODO: add prize
+                                    <div>
+                                      <p className="text-center text-sm text-muted-foreground">
+                                        Không có gì
+                                      </p>
+                                    </div>
+                                  ))}
+                                <Button
+                                  className="w-full"
+                                  variant={"link"}
+                                  onClick={() => setPrizeVisible(true)}
+                                >
+                                  Tạo giải thưởng
+                                </Button>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
 
-              <Button type="submit" className="self-end">
-                Thêm giải đấu
-              </Button>
-            </form>
-          </Form>
-        )}
-        {prizeVisible && (
-          <CreatePrizeModal visible={prizeVisible} onClose={() => setPrizeVisible(false)} />
+                  <Button type="submit" className="self-end">
+                    Thêm giải đấu
+                  </Button>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
     </>

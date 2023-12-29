@@ -137,7 +137,7 @@ const UpdateBranchForm = ({ branch }: Props) => {
             <FormItem>
               <FormLabel>Logo</FormLabel>
               <FormControl>
-                <Input placeholder="Footex" {...field} />
+                <Input placeholder="https://example.com/footex.png" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

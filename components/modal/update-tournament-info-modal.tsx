@@ -44,6 +44,7 @@ const formSchema = z
     endAt: z.date().refine((v) => v > new Date(), {
       message: "Thời gian kết thúc không được nhỏ hơn hiện tại",
     }),
+    image: z.string().url("Đường dẫn ảnh không hợp lệ"),
   })
   .refine((v) => v.startAt < v.endAt, {
     message: "Thời gian bắt đầu không được lớn hơn thời gian kết thúc",
@@ -83,6 +84,7 @@ const UpdateTournamentModal = ({
     const sendData: ITournament = {
       ...data,
       branch: id,
+      images: [data.image],
     }
 
     toast.loading("Đang cập nhật giải đấu...", {
@@ -114,6 +116,19 @@ const UpdateTournamentModal = ({
                   <FormLabel>Tên giải đấu</FormLabel>
                   <FormControl>
                     <Input placeholder="Giải đấu 1" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hình ảnh giải đấu</FormLabel>
+                  <FormControl>
+                    <Input placeholder="https://example.com/footex.png" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -79,7 +79,7 @@ const AllTournaments = ({ tournaments }: Props) => {
                   Sửa
                 </Button>
               }
-              initialData={{ ...row }}
+              initialData={{ ...row, image: row.images?.[0] ?? "" }}
               tournamentId={row?._id!}
             />
           )}
