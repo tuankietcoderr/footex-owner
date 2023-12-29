@@ -79,6 +79,7 @@ const formSchema = z
     ward: z.string().nonempty({ message: "Phường/xã không được để trống" }),
     street: z.string(),
     houseNumber: z.string(),
+    logo: z.string().url(),
   })
   .refine((data) => data.openAt <= data.closeAt, {
     message: "Thời gian đóng cửa không được nhỏ hơn thời gian mở cửa",
@@ -99,6 +100,7 @@ const CreateBranchForm = () => {
       ward: "",
       street: "",
       houseNumber: "",
+      logo: "",
     },
   })
 
@@ -135,7 +137,20 @@ const CreateBranchForm = () => {
             </FormItem>
           )}
         />
-        <Address />
+        <FormField
+          control={form.control}
+          name="logo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/footex.png" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Address showHouseNumber showStreet />
         <FormField
           control={form.control}
           name="phoneNumber"
