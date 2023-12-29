@@ -59,8 +59,8 @@ const formSchema = z
     openAt: z
       .number()
       .int()
-      .min(1, {
-        message: "Thời gian mở cửa không được nhỏ hơn 1",
+      .min(0, {
+        message: "Thời gian mở cửa không được nhỏ hơn 0",
       })
       .max(23, {
         message: "Thời gian mở cửa không được lớn hơn 23",
@@ -175,6 +175,8 @@ const CreateBranchForm = () => {
                   placeholder="Nhập thời gian mở cửa..."
                   {...field}
                   type="number"
+                  min={0}
+                  max={23}
                   onChange={(e) => {
                     if (!e.target.value) return field.onChange?.("")
                     field.onChange?.(parseInt(e.target.value.replaceAll(".", ""), 10))
@@ -195,11 +197,13 @@ const CreateBranchForm = () => {
                 <Input
                   placeholder="Nhập thời gian đóng cửa..."
                   {...field}
+                  type="number"
+                  min={0}
+                  max={23}
                   onChange={(e) => {
                     if (!e.target.value) return field.onChange?.("")
                     field.onChange?.(parseInt(e.target.value.replaceAll(".", ""), 10))
                   }}
-                  type="number"
                 />
               </FormControl>
               <FormMessage />

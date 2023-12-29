@@ -35,8 +35,8 @@ const formSchema = z.object({
     .min(6, {
       message: "Tên sân bóng không được ít hơn 6 ký tự",
     }),
-  price: z.number().min(1, {
-    message: "Giá tiền không được ít hơn 1",
+  price: z.number().min(1000, {
+    message: "Giá tiền không được ít hơn 1000",
   }),
   description: z
     .string()
@@ -47,6 +47,7 @@ const formSchema = z.object({
       message: "Mô tả không được ít hơn 6 ký tự",
     }),
   type: z.number({ required_error: "Loại sân không được để trống" }),
+  image: z.string().url("Ảnh không hợp lệ"),
 })
 
 type Props = {
@@ -61,6 +62,7 @@ const CreateFieldForm = ({ branchId }: Props) => {
       price: 180000,
       description: "",
       type: 5,
+      image: "",
     },
   })
 
@@ -104,6 +106,19 @@ const CreateFieldForm = ({ branchId }: Props) => {
         />
         <FormField
           control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Hình ảnh sân</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/footex.png" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="price"
           render={({ field }) => (
             <FormItem>
@@ -112,6 +127,7 @@ const CreateFieldForm = ({ branchId }: Props) => {
                 <Input
                   placeholder={String(130)}
                   {...field}
+                  min={1000}
                   onChange={(e) => {
                     if (!e.target.value) return field.onChange?.("")
                     field.onChange?.(parseInt(e.target.value.replaceAll(".", ""), 10))
