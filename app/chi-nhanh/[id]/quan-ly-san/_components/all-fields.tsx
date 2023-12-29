@@ -104,7 +104,7 @@ const AllFields = ({ fields, branchId }: Props) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <Input className="flex-1" placeholder="Tìm kiếm giải đấu..." onChange={onSearch} />
+        <Input className="flex-1" placeholder="Tìm kiếm sân bóng..." onChange={onSearch} />
         <Select onValueChange={onChangeStatus}>
           <SelectTrigger className="w-fit">
             <SelectValue placeholder="Trạng thái" />
