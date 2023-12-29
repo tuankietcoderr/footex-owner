@@ -86,7 +86,7 @@ const Page = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-fit w-[400px] space-y-4 rounded-lg p-6 shadow-lg"
       >
-        <h1 className="text-center text-2xl font-semibold">Đăng ký</h1>
+        <h1 className="text-center text-2xl font-semibold">Đăng ký chủ sân</h1>
         <FormField
           control={form.control}
           name="name"

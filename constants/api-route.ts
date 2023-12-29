@@ -2,7 +2,8 @@ const API_ROUTE = {
   BASE_URL:
     process.env.NODE_ENV === "development"
       ? "http://localhost:2003/api"
-      : "https://footex.up.railway.app/api",
+      : // : "http://localhost:2003/api",
+        "https://footex.up.railway.app/api", //! change this when deploy
   BRANCH: {
     INDEX: "/branch",
     ID: "/branch/:id",
