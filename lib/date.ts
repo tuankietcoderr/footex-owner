@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import viVN from "date-fns/locale/vi"
+import { vi } from "date-fns/locale"
 
 export const monthByNumber = {
   0: "January",
@@ -55,5 +55,5 @@ export const convertDateAndTimeToDateTime = (date: Date, time: number): Date => 
 }
 
 export const formatVietnameseDate = (date: Date, formatter: string): string => {
-  return format(new Date(date), formatter, { locale: viVN })
+  return format(new Date(date), formatter, { locale: vi })
 }

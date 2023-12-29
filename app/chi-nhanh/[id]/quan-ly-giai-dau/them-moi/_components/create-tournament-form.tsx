@@ -1,22 +1,9 @@
 "use client"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import ITournament, { ETournamentStatus } from "@/interface/ITournament"
-import { cn } from "@/lib/utils"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { CalendarIcon } from "@radix-ui/react-icons"
-import moment from "moment"
-import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { createTournament } from "@/actions/tournament-actions"
+import BigCalendar from "@/components/big-calendar"
+import LoadingOverlay from "@/components/loading-overlay"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -26,19 +13,29 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { useParams, useRouter } from "next/navigation"
-import { colorizeTournamentStatus } from "@/utils/status"
-import BigCalendar from "@/components/big-calendar"
-import { Event, SlotInfo } from "react-big-calendar"
 import ROUTE from "@/constants/route"
-import IFieldBookedQueue, { EFieldBookedQueueStatus } from "@/interface/IFieldBookedQueue"
-import toast from "react-hot-toast"
-import { createTournament } from "@/actions/tournament-actions"
 import IPrize from "@/interface/IPrize"
+import ITournament, { ETournamentStatus } from "@/interface/ITournament"
+import { formatVietnameseDate } from "@/lib/date"
+import { cn } from "@/lib/utils"
+import { colorizeTournamentStatus } from "@/utils/status"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CalendarIcon } from "@radix-ui/react-icons"
 import dynamic from "next/dynamic"
-import LoadingOverlay from "@/components/loading-overlay"
+import { useParams, useRouter } from "next/navigation"
+import React, { useEffect } from "react"
+import { Event, SlotInfo } from "react-big-calendar"
+import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
+import { z } from "zod"
 
 const CreatePrizeModal = dynamic(() => import("./create-prize-modal"), {
   ssr: false,
@@ -117,6 +114,7 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
 
   const onSelectEvent = (event: Event) => {
     const tournament = event.resource as ITournament
+    if (!tournament?._id) return
     router.push(
       ROUTE.BRANCH.TOURNAMENT.ID.replace(":branchId", id).replace(":id", tournament?._id!)
     )
@@ -273,7 +271,9 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
                               disabled
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
+                              {field.value
+                                ? formatVietnameseDate(field.value, "dd/MM/yyyy")
+                                : "Chọn ngày"}
                             </Button>
                           </FormControl>
                         </div>
@@ -296,7 +296,9 @@ const CreateTournamentForm = ({ tournaments = [], prizes = [] }: CreateTournamen
                               disabled
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
+                              {field.value
+                                ? formatVietnameseDate(field.value, "dd/MM/yyyy")
+                                : "Chọn ngày"}
                             </Button>
                           </FormControl>
                         </div>

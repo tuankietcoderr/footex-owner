@@ -1,29 +1,21 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { updateTournamentInfo } from "@/actions/tournament-actions"
 import ITournament from "@/interface/ITournament"
+import { formatVietnameseDate } from "@/lib/date"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import moment from "moment"
+import { useParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { z } from "zod"
+import { Button } from "../ui/button"
+import { Calendar } from "../ui/calendar"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { Button } from "../ui/button"
-import { Calendar } from "../ui/calendar"
-import IPrize from "@/interface/IPrize"
-import toast from "react-hot-toast"
-import { updateTournamentInfo } from "@/actions/tournament-actions"
-import { useParams } from "next/navigation"
+import { Textarea } from "../ui/textarea"
 
 const formSchema = z
   .object({
@@ -166,7 +158,9 @@ const UpdateTournamentModal = ({
                             className={cn(!field.value && "text-muted-foreground")}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
+                            {field.value
+                              ? formatVietnameseDate(field.value, "dd/MM/yyyy")
+                              : "Chọn ngày"}
                           </Button>
                         </PopoverTrigger>
                       </FormControl>
@@ -200,7 +194,9 @@ const UpdateTournamentModal = ({
                             className={cn(!field.value && "text-muted-foreground", "!m-0")}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? moment(field.value).format("DD/MM/YYYY") : "Chọn ngày"}
+                            {field.value
+                              ? formatVietnameseDate(field.value, "dd/MM/yyyy")
+                              : "Chọn ngày"}
                           </Button>
                         </PopoverTrigger>
                       </FormControl>
