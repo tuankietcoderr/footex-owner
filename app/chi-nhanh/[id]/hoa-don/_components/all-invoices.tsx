@@ -17,11 +17,13 @@ import IGuest from "@/interface/IGuest"
 import IInvoice, { EInvoiceStatus } from "@/interface/IInvoice"
 import { toDot } from "@/lib/converter"
 import { formatVietnameseDate } from "@/lib/date"
+import { cn } from "@/lib/utils"
 import { vilizeInvoiceStatus } from "@/utils/status"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import React, { useCallback, useEffect } from "react"
 import toast from "react-hot-toast"
+import Invoice from "./invoice"
 
 type Props = {
   invoices: IInvoice[]
@@ -67,31 +69,41 @@ const AllInvoices = ({ invoices }: Props) => {
     },
     {
       headRef: "Trạng thái",
-      render: (row: IInvoice) => (
-        <div className="flex justify-center">
-          <Select
-            onValueChange={(v) => onUpdateInvoiceStatus(row._id!, v as EInvoiceStatus)}
-            defaultValue={row.status}
-            value={row.status}
+      render: (row: IInvoice) =>
+        row.status === EInvoiceStatus.PENDING ? (
+          <div className="flex justify-center">
+            <Select
+              onValueChange={(v) => onUpdateInvoiceStatus(row._id!, v as EInvoiceStatus)}
+              defaultValue={row.status}
+              value={row.status}
+            >
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="Trạng thái" />
+              </SelectTrigger>
+              <SelectContent className="w-fit">
+                {Object.values(EInvoiceStatus).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {vilizeInvoiceStatus(status)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ) : (
+          <p
+            className={cn(
+              row.status === EInvoiceStatus.PAID ? "text-primary" : "text-secondary-foreground"
+            )}
           >
-            <SelectTrigger className="w-fit">
-              <SelectValue placeholder="Trạng thái" />
-            </SelectTrigger>
-            <SelectContent className="w-fit">
-              {Object.values(EInvoiceStatus).map((status) => (
-                <SelectItem key={status} value={status}>
-                  {vilizeInvoiceStatus(status)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      ),
+            {vilizeInvoiceStatus(row.status!)}
+          </p>
+        ),
     },
     {
       headRef: "Hành động",
       render: (row: IInvoice) => (
-        <div>
+        <div className="flex">
+          {row.status === EInvoiceStatus.PAID && <Invoice invoice={row} />}
           <Button
             variant={"ghost"}
             className="text-destructive"
@@ -129,6 +141,8 @@ const AllInvoices = ({ invoices }: Props) => {
       toast.error(message)
     }
   }
+
+  async function onPrintInvoice(id: string) {}
 
   const { id } = useParams<{
     id: string

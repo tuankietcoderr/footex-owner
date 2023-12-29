@@ -7,6 +7,7 @@ import OwnerSidebarItem from "./sidebar-item"
 import { IOwnerSideBarNavItem } from "./sidebar.type"
 import { Button } from "@/components/ui/button"
 import { logoutOwner } from "@/actions/auth-actions"
+import Logo from "@/components/logo"
 
 type Props = {
   branchId: string
@@ -54,14 +55,7 @@ const OwnerSideBar = ({ branchId }: Props) => {
       )}
       <aside className="flex max-h-screen min-h-screen flex-col items-center space-y-8 border-r border-border bg-card p-4 shadow-sm">
         <Link href={ROUTE.BRANCH.DASHBOARD.replace(":id", branchId)}>
-          <Image
-            src={"/next.svg"}
-            alt={"Next.js"}
-            width={100}
-            height={100}
-            className="border border-border"
-            priority
-          />
+          <Logo width={200} height={40} color="var(--primary)" className="fill-primary" />
         </Link>
         <div className="flex w-full flex-1 flex-col justify-between">
           <div>

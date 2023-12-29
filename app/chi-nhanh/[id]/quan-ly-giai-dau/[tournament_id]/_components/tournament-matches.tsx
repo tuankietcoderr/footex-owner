@@ -192,7 +192,7 @@ const TournamentMatches = ({ tournamentId, matches, fields, teams }: Props) => {
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value
-                          ? formatVietnameseDate(field.value, "dd/MM/yyyy hh:mm")
+                          ? formatVietnameseDate(field.value, "dd/MM/yyyy HH:mm")
                           : "Chọn giờ"}
                       </Button>
                     </FormControl>
@@ -217,7 +217,7 @@ const TournamentMatches = ({ tournamentId, matches, fields, teams }: Props) => {
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value
-                          ? formatVietnameseDate(field.value, "dd/MM/yyyy hh:mm")
+                          ? formatVietnameseDate(field.value, "dd/MM/yyyy HH:mm")
                           : "Chọn giờ"}
                       </Button>
                     </FormControl>

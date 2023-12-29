@@ -56,6 +56,8 @@ const BookedByModal = ({ visible = false, initialData, onSubmit, onOpenChange }:
     },
   })
 
+  console.log(new Date().toLocaleTimeString())
+
   const pathname = usePathname()
   const { id: branchId } = useParams<{ id: string }>()
 
@@ -106,7 +108,7 @@ const BookedByModal = ({ visible = false, initialData, onSubmit, onOpenChange }:
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {field.value
-                        ? formatVietnameseDate(field.value, "dd/MM/yyyy hh:mm")
+                        ? formatVietnameseDate(field.value, "dd/MM/yyyy HH:mm")
                         : "Chọn thời gian đặt"}
                     </Button>
                   </FormControl>
@@ -130,7 +132,7 @@ const BookedByModal = ({ visible = false, initialData, onSubmit, onOpenChange }:
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {field.value
-                          ? formatVietnameseDate(field.value, "dd/MM/yyyy hh:mm")
+                          ? formatVietnameseDate(field.value, "dd/MM/yyyy HH:mm")
                           : "Chọn thời gian kết thúc"}
                       </Button>
                     </FormControl>
