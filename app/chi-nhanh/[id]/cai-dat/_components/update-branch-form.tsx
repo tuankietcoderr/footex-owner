@@ -115,13 +115,13 @@ const UpdateBranchForm = ({ branch }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <h1 className="text-xl font-semibold">Tạo chi nhánh</h1>
+        <h1 className="text-xl font-semibold">Cập nhật thông tin chi nhánh</h1>
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tên cơ sở</FormLabel>
+              <FormLabel>Tên chi nhánh</FormLabel>
               <FormControl>
                 <Input placeholder="Footex" {...field} />
               </FormControl>
@@ -190,10 +190,10 @@ const UpdateBranchForm = ({ branch }: Props) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Thông tin cơ sở</FormLabel>
+              <FormLabel>Thông tin chi nhánh</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Nhập thông tin cơ sở..."
+                  placeholder="Nhập thông tin chi nhánh..."
                   className="min-h-[100px]"
                   {...field}
                 />

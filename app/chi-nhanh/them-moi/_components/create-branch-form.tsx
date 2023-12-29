@@ -127,7 +127,7 @@ const CreateBranchForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tên cơ sở</FormLabel>
+              <FormLabel>Tên chi nhánh</FormLabel>
               <FormControl>
                 <Input placeholder="Footex" {...field} />
               </FormControl>
@@ -196,10 +196,10 @@ const CreateBranchForm = () => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Thông tin cơ sở</FormLabel>
+              <FormLabel>Thông tin chi nhánh</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Nhập thông tin cơ sở..."
+                  placeholder="Nhập thông tin chi nhánh..."
                   className="min-h-[100px]"
                   {...field}
                 />

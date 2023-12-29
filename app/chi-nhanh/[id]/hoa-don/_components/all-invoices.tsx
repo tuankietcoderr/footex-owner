@@ -15,6 +15,7 @@ import ROUTE from "@/constants/route"
 import IFieldBookedQueue from "@/interface/IFieldBookedQueue"
 import IGuest from "@/interface/IGuest"
 import IInvoice, { EInvoiceStatus } from "@/interface/IInvoice"
+import { toDot } from "@/lib/converter"
 import { formatVietnameseDate } from "@/lib/date"
 import { vilizeInvoiceStatus } from "@/utils/status"
 import Link from "next/link"
@@ -37,6 +38,7 @@ const AllInvoices = ({ invoices }: Props) => {
     "Ngày lập hóa đơn",
     "Khách hàng",
     "Thời gian sử dụng",
+    "Tổng tiền",
     "Trạng thái",
     "Hành động",
   ]
@@ -58,6 +60,10 @@ const AllInvoices = ({ invoices }: Props) => {
     {
       headRef: "Ngày lập hóa đơn",
       render: (row: IInvoice) => formatVietnameseDate(row.createdAt!, "hh:mm dd/MM/yyyy"),
+    },
+    {
+      headRef: "Tổng tiền",
+      render: (row: IInvoice) => `${toDot(row.total)} VND`,
     },
     {
       headRef: "Trạng thái",
